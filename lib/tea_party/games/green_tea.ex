@@ -46,6 +46,7 @@ defmodule TeaParty.Games.GreenTea do
     """
     @spec new(list(String.t()), Configuration.t()) :: t()
     def new(players, configuration) do
+      # Each player starts with 0 points initially
       points =
         players
         |> Enum.map(fn player -> {player, 0} end)
