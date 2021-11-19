@@ -23,16 +23,51 @@ defmodule TeaParty.Games.GreenTea do
        points_per_game: non_neg_integer()
     }
 
-    defstruct [time_per_round: 10, points_per_game: 50]
+    @enforce_keys [:time_per_round, :points_per_game]
 
-    @spec set_time_per_round(t(), non_neg_integer()) :: t()
-    def set_time_per_round(%__MODULE__{} = configuration, time) when is_integer(time) and time > 0 do
-      %__MODULE__{configuration | time_per_round: time}
-    end
+    defstruct [:time_per_round, :points_per_game]
+  end
 
-    @spec set_points_per_game(t(), non_neg_integer()) :: t()
-    def set_points_per_game(%__MODULE__{} = configuration, points) when is_integer(points) and points > 0 do
-      %__MODULE__{configuration | points_per_game: points}
+  defmodule Session do
+    @moduledoc """
+    Module representing a single green tea session (a lobby if you will)
+    """
+    @type t :: %__MODULE__{
+        points: %{String.t() => non_neg_integer()},
+        configuration: Configuration.t()
+    }
+
+    @enforce_keys [:points, :configuration]
+
+    defstruct [:points, :configuration]
+
+    @doc """
+    Create a new green tea game session
+    """
+    @spec new(list(String.t()), Configuration.t()) :: t()
+    def new(players, configuration) do
+      points =
+        players
+        |> Enum.map(fn player -> {player, 0} end)
+        |> Map.new()
+
+      %__MODULE__{
+        points: points,
+        configuration: configuration
+      }
     end
+  end
+
+  @doc """
+  Create a new green tea game session for the specified list of players and with the provided configuration
+  """
+  @spec new_session(list(String.t()), non_neg_integer(), non_neg_integer()) :: Session.t()
+  def new_session(players, time_per_round \\ 10, points_per_game \\ 50) when time_per_round > 0 and points_per_game > 0 do
+    configuration = %Configuration{
+      time_per_round: time_per_round,
+      points_per_game: points_per_game
+    }
+
+    Session.new(players, configuration)
   end
 end
