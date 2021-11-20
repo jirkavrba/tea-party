@@ -16,4 +16,15 @@ defmodule TeaParty.Game do
     word first receives the points.
   """
   @type mode :: :green_tea | :yellow_tea | :red_tea
+
+  @type id :: String.t()
+
+  @type t :: %__MODULE__{
+    id: id(),
+    mode: mode(),
+    playing: boolean(),
+    configuration: any(), # TODO: Implement game configuration
+  }
+
+  defstruct [:id, :mode, :configuration, :playing]
 end
