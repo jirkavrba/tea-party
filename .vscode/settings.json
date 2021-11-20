@@ -1,3 +1,13 @@
 {
-    "cSpell.enabled": true
+    "cSpell.enabled": true,
+    "spellright.language": [],
+    "spellright.documentTypes": [
+        "markdown",
+        "latex",
+        "plaintext"
+    ],
+    "cSpell.enableFiletypes": [
+        "elixir",
+        "surface"
+    ]
 }

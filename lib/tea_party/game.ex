@@ -8,8 +8,8 @@ defmodule TeaParty.Game do
     do not receive any points.
 
   - Yellow tea - the goal is to submit a space-separated list of words. The player
-    with the largest number of valid words wins and receives 5 poinst. If there is a tie,
-    player who submitted their wordlist receives the points.
+    with the largest number of valid words wins and receives 5 points. If there is a tie,
+    player who submitted their word list receives the points.
 
   - Red tea - the goal is to submit the longest valid word possible. The player with
     the longest word receives 5 points. If there is a tie, player who submitted its
