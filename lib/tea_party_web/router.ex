@@ -18,6 +18,7 @@ defmodule TeaPartyWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :index
+    get "/template/:template", PageController, :template
   end
 
   # Other scopes may use custom stacks.
