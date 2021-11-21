@@ -23,8 +23,24 @@ defmodule TeaParty.Game do
     id: id(),
     mode: mode(),
     playing: boolean(),
-    configuration: any(), # TODO: Implement game configuration
+    configuration: Configuration.t(),
   }
 
-  defstruct [:id, :mode, :configuration, :playing]
+  defstruct [:id, :mode, :playing, :configuration]
+
+  defmodule Configuration do
+    @moduledoc """
+    Game configuration, currently only supports the following:
+    - `time_per_round`: how many seconds players have to come up with word/s
+    - `points_to_win`: how many points do player have to get in order to win the game
+    """
+
+    @type t :: %__MODULE__{
+      time_per_round: non_neg_integer(),
+      points_to_win: non_neg_integer()
+    }
+
+    defstruct time_per_round: 10,
+              points_to_win: 50
+  end
 end
