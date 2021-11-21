@@ -20,11 +20,11 @@ defmodule TeaParty.Game do
   @type id :: String.t()
 
   @type t :: %__MODULE__{
-    id: id(),
-    mode: mode(),
-    playing: boolean(),
-    configuration: Configuration.t(),
-  }
+          id: id(),
+          mode: mode(),
+          playing: boolean(),
+          configuration: Configuration.t()
+        }
 
   defstruct [:id, :mode, :playing, :configuration]
 
@@ -36,9 +36,9 @@ defmodule TeaParty.Game do
     """
 
     @type t :: %__MODULE__{
-      seconds_per_round: non_neg_integer(),
-      points_to_win: non_neg_integer()
-    }
+            seconds_per_round: non_neg_integer(),
+            points_to_win: non_neg_integer()
+          }
 
     defstruct seconds_per_round: 10,
               points_to_win: 50
