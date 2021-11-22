@@ -22,8 +22,9 @@ export default {
     username: ""
   }),
   methods: {
-    submit() {
-      this.$store.dispatch("login", this.username);
+    async submit() {
+      await this.$store.dispatch("login", this.username);
+      await this.$router.replace("/lobbies");
     }
   },
   computed: {
