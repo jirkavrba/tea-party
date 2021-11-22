@@ -6,8 +6,13 @@
         Tea party
       </h1>
     </header>
-    <div class="mt-10 container mx-auto">
+    <div :class="`mt-10 container mx-auto transition filter ${loading ? 'blur-sm' : ''}`">
       <router-view/>
+    </div>
+    <div class="rounded-xl transition absolute w-full h-full left-0 top-0 flex items-center justify-center bg-opacity-75 bg-gray-800" v-if="loading">
+      <div class="animate-spin w-48 h-48 flex items-center justify-center">
+        <i class="fas fa-yin-yang text-9xl text-white"></i>
+      </div>
     </div>
   </div>
 </template>
@@ -16,6 +21,11 @@
 import {defineComponent} from "vue";
 
 export default defineComponent({
-  name: "App"
+  name: "App",
+  computed: {
+    loading() {
+      return this.$store.state.loading;
+    }
+  }
 })
 </script>
