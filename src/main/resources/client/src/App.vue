@@ -1,7 +1,9 @@
 <template>
   <div class="flex flex-col">
     <header class="bg-gray-800 text-center py-10 shadow-xl">
-      <span class="font-black text-3xl mr-5 text-green-500">お茶会</span>
+      <span class="font-black text-3xl text-gray-700 mx-5">&laquo;</span>
+      <span class="font-black text-3xl text-green-500">お茶会</span>
+      <span class="font-black text-3xl text-gray-700 mx-5">&raquo;</span>
       <h1 class="font-black text-6xl text-white">
         Tea party
       </h1>
