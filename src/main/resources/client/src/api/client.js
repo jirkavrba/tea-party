@@ -1,8 +1,13 @@
 // TODO: Make this node.env dependent
-const api = "http://localhost:8080/";
+const api = "http://localhost:8080";
 
 export default {
-    login(username) {
+    async login(username) {
+        const response = await fetch(api + "/api/login", {
+            method: "post",
+            body: JSON.stringify({ username })
+        }).then(response => response.json())
 
+        return response.token;
     }
 }

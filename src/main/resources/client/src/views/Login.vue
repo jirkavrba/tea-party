@@ -23,7 +23,7 @@ export default {
   }),
   methods: {
     submit() {
-      this.$store.commit("setLoading", true);
+      this.$store.dispatch("login", this.username);
     }
   },
   computed: {
