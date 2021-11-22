@@ -21,6 +21,11 @@ export default {
   data: () => ({
     username: ""
   }),
+  mounted() {
+    if (this.$store.state.token !== null) {
+      this.$router.push("/lobbies");
+    }
+  },
   methods: {
     async submit() {
       await this.$store.dispatch("login", this.username);
