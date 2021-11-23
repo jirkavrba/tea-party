@@ -13,15 +13,12 @@ private fun generateRandomToken(): String {
 }
 
 @Entity
-data class Player(
+class Player(
     @Id
     val id: UUID,
     val username: String,
     val token: String
 ) {
-    constructor(username: String) : this(UUID.randomUUID(), username, generateRandomToken())
-    constructor() : this("")
-
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other == null || Hibernate.getClass(this) != Hibernate.getClass(other)) return false
