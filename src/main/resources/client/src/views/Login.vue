@@ -39,7 +39,7 @@ export default {
       return this.$store.state.loading;
     },
     disabled() {
-      return this.username.trim().length <= 3;
+      return this.username.trim().length < 3;
     }
   }
 }
