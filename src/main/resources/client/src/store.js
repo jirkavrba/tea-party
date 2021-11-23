@@ -10,6 +10,12 @@ const setOrRemoveLocalStorageItem = (key, value) => {
     window.localStorage.setItem(key, value);
 }
 
+const whileLoading = async (store, callback) => {
+    await store.commit("setLoading", true)
+    await callback()
+    await store.commit("setLoading", false)
+}
+
 export default createStore({
     state: {
         token: window.localStorage.getItem("token"),
@@ -18,31 +24,26 @@ export default createStore({
     },
     actions: {
         async login(store, username) {
-            await store.commit("setLoading", true);
-
-            const token = await client.login(username);
-
-            await store.commit("setUsername", username);
-            await store.commit("setToken", token);
-
-            await store.commit("setLoading", false);
+            await whileLoading(store, async () => {
+                const token = await client.login(username);
+                await store.commit("setUsername", username);
+                await store.commit("setToken", token);
+            })
         },
         async validateToken(store) {
-            await store.commit("setLoading", true);
+            await whileLoading(store, async () => {
+                // Do not validate the token, if it's null already
+                if (store.state.token === null) {
+                    await store.commit("setLoading", false);
+                    return;
+                }
 
-            // Do not validate the token, if it's null already
-            if (store.state.token === null) {
-                await store.commit("setLoading", false);
-                return;
-            }
-
-            const valid = await client.validateToken(store.state.token);
-            if (!valid) {
-                store.commit("setToken", null);
-                store.commit("setUsername", null);
-            }
-
-            await store.commit("setLoading", false);
+                const valid = await client.validateToken(store.state.token);
+                if (!valid) {
+                    store.commit("setToken", null);
+                    store.commit("setUsername", null);
+                }
+            });
         }
     },
     mutations: {
