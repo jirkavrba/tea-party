@@ -1,7 +1,9 @@
 package dev.vrba.teaparty.controllers
 
 import dev.vrba.teaparty.engine.GameMode
+import dev.vrba.teaparty.entities.Lobby
 import dev.vrba.teaparty.entities.Player
+import dev.vrba.teaparty.repositories.LobbiesRepository
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
@@ -17,7 +19,7 @@ import javax.validation.constraints.NotBlank
 @Validated
 @RestController
 @RequestMapping("/api/lobby")
-class LobbiesController {
+class LobbiesController(private val repository: LobbiesRepository) {
 
     // TODO: Add support for lobby configuration
     data class CreateLobbyRequest(@NotBlank val mode: String)
@@ -31,9 +33,9 @@ class LobbiesController {
             else -> throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid game mode selected.")
         }
 
-        // TODO: Implement lobbies
-        val lobby = "new instance of lobby(${mode})"
+        val lobby = Lobby(mode = mode, host = host)
+        val instance = repository.save(lobby)
 
-        return ResponseEntity.ok(lobby)
+        return ResponseEntity.ok(instance)
     }
 }
