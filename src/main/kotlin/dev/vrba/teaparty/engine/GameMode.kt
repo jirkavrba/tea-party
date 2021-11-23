@@ -14,8 +14,8 @@ package dev.vrba.teaparty.engine
  *                the longest valid word, receives 5 points. If there is a tie, the player who submitted
  *                his word first, receives the points.
  */
-enum class GameMode {
-    GreenTea,
-    YellowTea,
-    RedTea
+enum class GameMode(val value: String) {
+    GreenTea("green"),
+    YellowTea("yellow"),
+    RedTea("red")
 }

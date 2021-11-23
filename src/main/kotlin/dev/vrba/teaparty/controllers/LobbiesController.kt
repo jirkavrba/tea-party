@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.server.ResponseStatusException
 import javax.validation.Valid
 import javax.validation.constraints.NotBlank
 
@@ -27,14 +28,7 @@ class LobbiesController {
             "green" -> GameMode.GreenTea
             "yellow" -> GameMode.YellowTea
             "red" -> GameMode.RedTea
-            // TODO: Use the errors api instead of custom body
-            else -> return ResponseEntity.badRequest().body(
-                    mapOf(
-                            "error" to HttpStatus.BAD_REQUEST.reasonPhrase,
-                            "status" to HttpStatus.BAD_REQUEST.value(),
-                            "message" to "Invalid game mode selected, allowed values are: 'green', 'yellow' or 'red'"
-                    )
-            )
+            else -> throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid game mode selected.")
         }
 
         // TODO: Implement lobbies
