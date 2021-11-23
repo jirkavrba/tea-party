@@ -29,7 +29,6 @@ class LobbiesController(private val repository: LobbiesRepository) {
         return ResponseEntity.ok(response)
     }
 
-    // TODO: Add support for lobby configuration
     data class CreateLobbyRequest(@NotBlank val mode: String)
 
     @PostMapping("/lobby/create")
