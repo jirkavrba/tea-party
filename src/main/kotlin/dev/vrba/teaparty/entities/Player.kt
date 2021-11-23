@@ -15,9 +15,9 @@ private fun generateRandomToken(): String {
 @Entity
 class Player(
     @Id
-    val id: UUID,
+    val id: UUID = UUID.randomUUID(),
+    val token: String = generateRandomToken(),
     val username: String,
-    val token: String
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

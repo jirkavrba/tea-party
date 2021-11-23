@@ -22,8 +22,8 @@ class LoginController(private val repository: PlayersRepository) {
     @PostMapping
     fun login(@Valid @RequestBody request: LoginRequest): ResponseEntity<Player> {
         val username = request.username
-        val player = repository.save(Player(username))
+        val player = Player(username = username)
 
-        return ResponseEntity.ok(player)
+        return ResponseEntity.ok(repository.save(player))
     }
 }
