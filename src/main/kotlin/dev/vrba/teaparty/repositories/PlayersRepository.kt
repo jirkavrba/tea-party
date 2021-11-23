@@ -6,4 +6,6 @@ import org.springframework.stereotype.Repository
 import java.util.*
 
 @Repository
-interface PlayersRepository : CrudRepository<Player, UUID>
+interface PlayersRepository : CrudRepository<Player, UUID> {
+    fun findByToken(token: String): Player?
+}
