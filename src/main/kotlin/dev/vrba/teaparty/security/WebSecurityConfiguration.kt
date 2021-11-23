@@ -17,12 +17,16 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 class WebSecurityConfiguration(private val filter: TokenAuthenticationFilter) : WebSecurityConfigurerAdapter() {
 
     override fun configure(http: HttpSecurity) {
-        http.cors().and()
-                .csrf().disable()
-                .addFilterBefore(filter, UsernamePasswordAuthenticationFilter::class.java)
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-                .authorizeRequests()
-                    .antMatchers("/api/login").permitAll()
-                    .antMatchers("/api/**").authenticated()
+        http.cors()
+                .and()
+            .csrf()
+                .disable()
+            .addFilterBefore(filter, UsernamePasswordAuthenticationFilter::class.java)
+            .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+            .authorizeRequests()
+                .antMatchers("/api/login").permitAll()
+                .antMatchers("/api/**").authenticated()
     }
 }
