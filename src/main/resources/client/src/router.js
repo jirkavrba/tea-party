@@ -2,6 +2,7 @@ import {createRouter, createWebHashHistory} from "vue-router";
 import Homepage from "./views/Homepage.vue";
 import Login from "./views/Login.vue";
 import Lobbies from "./views/Lobbies.vue";
+import CreateLobby from "./views/CreateLobby.vue";
 
 export default createRouter({
     history: createWebHashHistory(),
@@ -17,6 +18,10 @@ export default createRouter({
         {
             path: "/lobbies",
             component: Lobbies
+        },
+        {
+            path: "/create-lobby",
+            component: CreateLobby
         },
         {
             path: "/:catchAll(.*)",

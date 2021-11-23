@@ -27,14 +27,21 @@
 <script>
 export default {
   name: "Lobbies",
+  data: () => ({
+    intervalHook: null
+  }),
   async mounted() {
     await this.$store.dispatch("loadLobbies");
-    window.setInterval(this.loadLobbies, 10000);
+    this.intervalHook = window.setInterval(this.loadLobbies, 10000);
+  },
+  beforeUnmount() {
+    window.clearInterval(this.intervalHook);
   },
   methods: {
     async loadLobbies() {
       await this.$store.dispatch("loadLobbies");
     },
+    // TODO: Extract mode helpers to a separate file
     icon(mode) {
       const titles = {
         "GreenTea": "fa-hourglass-half",
