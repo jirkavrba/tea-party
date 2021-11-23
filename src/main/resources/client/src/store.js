@@ -47,7 +47,8 @@ export default createStore({
         },
         async loadLobbies(store) {
             await whileLoading(store, async () => {
-                await client.loadLobbies(store.state.token);
+                const lobbies = await client.loadLobbies(store.state.token);
+                await store.commit("setLobbies", lobbies);
             });
         }
     },
@@ -62,6 +63,9 @@ export default createStore({
         setToken(state, token) {
             state.token = token;
             setOrRemoveLocalStorageItem("token", token);
+        },
+        setLobbies(state, lobbies) {
+            state.lobbies = lobbies;
         }
     }
 });
