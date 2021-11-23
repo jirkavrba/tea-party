@@ -1,5 +1,6 @@
 package dev.vrba.teaparty.entities
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import dev.vrba.teaparty.engine.GameMode
 import java.util.*
 import javax.persistence.Entity
@@ -15,8 +16,10 @@ class Lobby(
     val mode: GameMode,
 
     @OneToOne
+    @JsonIgnoreProperties("token")
     val host: Player,
 
     @OneToMany
+    @JsonIgnoreProperties("token")
     val players: MutableList<Player> = mutableListOf()
 )
