@@ -19,10 +19,12 @@ export default {
             .then(response => response.data.token);
     },
     async validateToken(token) {
-        console.log(token, auth(token));
-
         return await client.get("/api/login/check", {headers: auth(token)})
             .then(response => true)
             .catch(error => false)
+    },
+    async loadLobbies(token) {
+        return await client.get("/api/lobbies", {headers: auth(token)})
+            .then(response => response.data);
     }
 }

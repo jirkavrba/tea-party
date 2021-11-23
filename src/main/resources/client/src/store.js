@@ -21,6 +21,7 @@ export default createStore({
         token: window.localStorage.getItem("token"),
         username: window.localStorage.getItem("username"),
         loading: false,
+        lobbies: []
     },
     actions: {
         async login(store, username) {
@@ -34,7 +35,6 @@ export default createStore({
             await whileLoading(store, async () => {
                 // Do not validate the token, if it's null already
                 if (store.state.token === null) {
-                    await store.commit("setLoading", false);
                     return;
                 }
 
@@ -43,6 +43,11 @@ export default createStore({
                     store.commit("setToken", null);
                     store.commit("setUsername", null);
                 }
+            });
+        },
+        async loadLobbies(store) {
+            await whileLoading(store, async () => {
+                await client.loadLobbies(store.state.token);
             });
         }
     },

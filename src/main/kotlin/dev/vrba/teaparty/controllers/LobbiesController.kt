@@ -10,6 +10,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.server.ResponseStatusException
+import java.util.*
 import javax.validation.Valid
 import javax.validation.constraints.NotBlank
 
@@ -18,15 +19,15 @@ import javax.validation.constraints.NotBlank
 @RequestMapping("/api")
 class LobbiesController(private val repository: LobbiesRepository) {
 
-    @GetMapping("/lobbies")
-    fun listLobbies(): ResponseEntity<*> {
-        val lobbies = repository.findAll().toList()
-        val response = mapOf(
-                "count" to lobbies.size,
-                "lobbies" to lobbies
-        )
+    data class LobbyListingDto(val id: UUID, val mode: GameMode, val players: Int)
 
-        return ResponseEntity.ok(response)
+    @GetMapping("/lobbies")
+    fun listLobbies(): ResponseEntity<List<LobbyListingDto>> {
+        val lobbies = repository.findAll()
+                .toList()
+                .map { LobbyListingDto(it.id, it.mode, it.players.size + 1) }
+
+        return ResponseEntity.ok(lobbies)
     }
 
     data class CreateLobbyRequest(@NotBlank val mode: String)
