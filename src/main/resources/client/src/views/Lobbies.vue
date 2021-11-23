@@ -28,7 +28,8 @@
 export default {
   name: "Lobbies",
   async mounted() {
-    await this.$store.dispatch("loadLobbies")
+    await this.$store.dispatch("loadLobbies");
+    window.setInterval(this.loadLobbies, 10000);
   },
   methods: {
     async loadLobbies() {
