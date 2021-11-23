@@ -1,7 +1,7 @@
 package dev.vrba.teaparty.controllers
 
-import dev.vrba.teaparty.entities.User
-import dev.vrba.teaparty.repositories.UsersRepository
+import dev.vrba.teaparty.entities.Player
+import dev.vrba.teaparty.repositories.PlayersRepository
 import org.springframework.http.ResponseEntity
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.PostMapping
@@ -15,15 +15,15 @@ import javax.validation.constraints.NotBlank
 @Validated
 @RestController
 @RequestMapping("/api/login")
-class LoginController(private val repository: UsersRepository) {
+class LoginController(private val repository: PlayersRepository) {
 
     data class LoginRequest(@NotBlank @Min(3) val username: String)
 
     @PostMapping
-    fun login(@Valid @RequestBody request: LoginRequest): ResponseEntity<User> {
+    fun login(@Valid @RequestBody request: LoginRequest): ResponseEntity<Player> {
         val username = request.username
-        val user = repository.save(User(username))
+        val player = repository.save(Player(username))
 
-        return ResponseEntity.ok(user)
+        return ResponseEntity.ok(player)
     }
 }

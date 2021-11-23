@@ -13,7 +13,7 @@ private fun generateRandomToken(): String {
 }
 
 @Entity
-data class User(
+data class Player(
     @Id
     val id: UUID,
     val username: String,
@@ -25,7 +25,7 @@ data class User(
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other == null || Hibernate.getClass(this) != Hibernate.getClass(other)) return false
-        if (other !is User) return false
+        if (other !is Player) return false
 
         return id == other.id
     }
