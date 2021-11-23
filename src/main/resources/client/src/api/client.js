@@ -26,5 +26,9 @@ export default {
     async loadLobbies(token) {
         return await client.get("/api/lobbies", {headers: auth(token)})
             .then(response => response.data);
+    },
+    async createLobby(token, mode) {
+        return await client.post("/api/lobby/create", {mode: mode}, {headers: auth(token)})
+            .then(response => response.data);
     }
 }

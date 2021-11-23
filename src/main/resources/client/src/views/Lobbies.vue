@@ -25,6 +25,8 @@
   </div>
 </template>
 <script>
+import {icon, title, color} from "../helpers/mode"
+
 export default {
   name: "Lobbies",
   data: () => ({
@@ -41,34 +43,9 @@ export default {
     async loadLobbies() {
       await this.$store.dispatch("loadLobbies");
     },
-    // TODO: Extract mode helpers to a separate file
-    icon(mode) {
-      const titles = {
-        "GreenTea": "fa-hourglass-half",
-        "YellowTea": "fa-sort-amount-up",
-        "RedTea": "fa-ruler",
-      }
-
-      return titles[mode] || "coffee";
-    },
-    title(mode) {
-      const titles = {
-        "GreenTea": "Green tea",
-        "YellowTea": "Yellow tea",
-        "RedTea": "Red tea",
-      }
-
-      return titles[mode] || mode;
-    },
-    color(mode, type) {
-      const classes = {
-        "GreenTea": "green-500",
-        "YellowTea": "yellow-300",
-        "RedTea": "red-500",
-      }
-
-      return `${type}-${classes[mode] || "gray-500"}`;
-    }
+    icon: (mode) => icon(mode),
+    title: (mode) => title(mode),
+    color: (mode, component) => color(mode, component),
   },
   computed: {
     lobbies: function () {

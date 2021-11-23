@@ -11,9 +11,11 @@ const setOrRemoveLocalStorageItem = (key, value) => {
 }
 
 const whileLoading = async (store, callback) => {
-    await store.commit("setLoading", true)
-    await callback()
-    await store.commit("setLoading", false)
+    await store.commit("setLoading", true);
+    const response = await callback();
+    await store.commit("setLoading", false);
+
+    return response;
 }
 
 export default createStore({
@@ -50,6 +52,13 @@ export default createStore({
                 const lobbies = await client.loadLobbies(store.state.token);
                 await store.commit("setLobbies", lobbies);
             });
+        },
+        async createLobby(store, mode) {
+            const lobby = await whileLoading(store, async () => {
+                return await client.createLobby(store.state.token, mode);
+            });
+
+            return lobby;
         }
     },
     mutations: {
