@@ -21,9 +21,11 @@ export default {
   data: () => ({
     username: ""
   }),
-  mounted() {
+  async mounted() {
+    await this.$store.dispatch("validateToken");
+
     if (this.$store.state.token !== null) {
-      this.$router.push("/lobbies");
+      await this.$router.push("/lobbies");
     }
   },
   methods: {
