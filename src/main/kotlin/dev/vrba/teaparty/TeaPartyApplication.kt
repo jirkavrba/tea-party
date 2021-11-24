@@ -1,6 +1,6 @@
 package dev.vrba.teaparty
 
-import dev.vrba.teaparty.development.DatabaseSeeder
+import dev.vrba.teaparty.database.DatabaseSeeder
 import org.springframework.boot.CommandLineRunner
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication

@@ -1,4 +1,4 @@
-package dev.vrba.teaparty.development
+package dev.vrba.teaparty.database
 
 import dev.vrba.teaparty.engine.GameMode
 import dev.vrba.teaparty.entities.Lobby
