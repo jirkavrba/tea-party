@@ -102,6 +102,8 @@ class LobbiesController(private val repository: LobbiesRepository) {
         // TODO: Start the game
         // TODO: Broadcast change to websocket connections
 
+        repository.delete(lobby)
+
         return ResponseEntity.ok().build<String>()
     }
 }
