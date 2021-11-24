@@ -23,7 +23,8 @@ export default createStore({
         token: window.localStorage.getItem("token"),
         username: window.localStorage.getItem("username"),
         loading: false,
-        lobbies: []
+        lobbies: [],
+        lobby: null
     },
     actions: {
         async login(store, username) {
@@ -54,11 +55,15 @@ export default createStore({
             });
         },
         async createLobby(store, mode) {
-            const lobby = await whileLoading(store, async () => {
+            return await whileLoading(store, async () => {
                 return await client.createLobby(store.state.token, mode);
             });
-
-            return lobby;
+        },
+        async loadLobby(store, id) {
+            await whileLoading(store, async () => {
+                const lobby = await client.loadLobby(store.state.token, id);
+                await store.commit("setLobby", lobby);
+            });
         }
     },
     mutations: {
@@ -75,6 +80,9 @@ export default createStore({
         },
         setLobbies(state, lobbies) {
             state.lobbies = lobbies;
+        },
+        setLobby(state, lobby) {
+            state.lobby = lobby;
         }
     }
 });

@@ -8,8 +8,10 @@ const client = axios.create({
     }
 });
 
-const auth = (token) => ({
-    "Authorization": `Bearer ${token}`
+const authenticate = (token) => ({
+    headers: {
+        "Authorization": `Bearer ${token}`
+    }
 })
 
 export default {
@@ -19,16 +21,20 @@ export default {
             .then(response => response.data.token);
     },
     async validateToken(token) {
-        return await client.get("/api/login/check", {headers: auth(token)})
+        return await client.get("/api/login/check", authenticate(token))
             .then(response => true)
             .catch(error => false)
     },
-    async loadLobbies(token) {
-        return await client.get("/api/lobbies", {headers: auth(token)})
+    async createLobby(token, mode) {
+        return await client.post("/api/lobby/create", {mode: mode}, authenticate(token))
             .then(response => response.data);
     },
-    async createLobby(token, mode) {
-        return await client.post("/api/lobby/create", {mode: mode}, {headers: auth(token)})
+    async loadLobbies(token) {
+        return await client.get("/api/lobbies", authenticate(token))
+            .then(response => response.data);
+    },
+    async loadLobby(token, id) {
+        return await client.get(`/api/lobby/${id}`, authenticate(token))
             .then(response => response.data);
     }
 }
