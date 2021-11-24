@@ -33,10 +33,41 @@ class LobbiesController(private val repository: LobbiesRepository) {
 
     @GetMapping("/lobby/{id}")
     fun lobby(@PathVariable id: UUID): ResponseEntity<Lobby> {
-        val lobby = repository.findByIdOrNull(id)
-                ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "Lobby could not be found")
+        val lobby = repository.findByIdOrNull(id) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "Lobby could not be found")
 
         return ResponseEntity.ok(lobby)
+    }
+
+    @PostMapping("/lobby/{id}/join")
+    fun join(@AuthenticationPrincipal player: Player, @PathVariable id: UUID): ResponseEntity<*> {
+        val lobby = repository.findByIdOrNull(id) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "Lobby could not be found")
+
+        if (lobby.players.contains(player)) {
+            throw ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "Player is already joined in this lobby")
+        }
+
+        lobby.players.add(player)
+        repository.save(lobby)
+
+        // TODO: Broadcast change to websocket sessions
+
+        return ResponseEntity.status(HttpStatus.CREATED).build<String>();
+    }
+
+    @PostMapping("/lobby/{id}/leave")
+    fun leave(@AuthenticationPrincipal player: Player, @PathVariable id: UUID) : ResponseEntity<*> {
+        val lobby = repository.findByIdOrNull(id) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "Lobby could not be found")
+
+        if (!lobby.players.contains(player)) {
+            throw ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "Player is not joined in this lobby")
+        }
+
+        lobby.players.remove(player)
+        repository.save(lobby)
+
+        // TODO: Broadcast change to websocket sessions
+
+        return ResponseEntity.status(HttpStatus.CREATED).build<String>();
     }
 
     data class CreateLobbyRequest(@NotBlank val mode: String)
