@@ -64,6 +64,12 @@ export default createStore({
                 const lobby = await client.loadLobby(store.state.token, id);
                 await store.commit("setLobby", lobby);
             });
+        },
+        async joinLobby(store, id) {
+            await whileLoading(store, async () => {
+                await client.joinLobby(store.state.token, id);
+                // TODO: Connect to the lobby websocket channel
+            })
         }
     },
     mutations: {

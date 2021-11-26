@@ -36,5 +36,10 @@ export default {
     async loadLobby(token, id) {
         return await client.get(`/api/lobby/${id}`, authenticate(token))
             .then(response => response.data);
+    },
+    async joinLobby(token, id) {
+        return await client.post(`/api/lobby/${id}/join`, {}, authenticate(token))
+            .then(response => response.data)
+            .catch(response => response.data)
     }
 }
