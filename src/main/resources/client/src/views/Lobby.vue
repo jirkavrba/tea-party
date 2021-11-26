@@ -17,6 +17,8 @@ export default defineComponent({
       await this.$router.replace("/");
       return;
     }
+
+    // TODO: Connect to the websocket endpoint
   }
 });
 </script>
