@@ -18,12 +18,19 @@ class WordScoringService(@Value("\${wordlist.path:/wordlist.txt}") path: String)
 
     fun isValidWord(word: String): Boolean = words.contains(word.lowercase())
 
-    fun score(mode: GameMode, word: SubmittedWord, previous: List<ScoredWord>): ScoredWord =
-        when (mode) {
+    fun score(mode: GameMode, word: SubmittedWord, previous: List<ScoredWord>): ScoredWord {
+        // If the word is not a valid word, or it has been submitted before, automatically score it with -1 points
+        if (!isValidWord(word.value) || previous.any { it.value == word.value }) {
+            return word.score(-1.0)
+        }
+
+        // Otherwise, proceed with scoring it based on the selected game mode
+        return when (mode) {
             GameMode.GreenTea -> scoreGreenTea(word, previous)
             GameMode.YellowTea -> scoreYellowTea(word, previous)
             GameMode.RedTea -> scoreRedTea(word)
         }
+    }
 
     // First word receives 3 points, second 2 points, third 1 point and all following 0 points
     private fun scoreGreenTea(word: SubmittedWord, previous: List<ScoredWord>): ScoredWord =
