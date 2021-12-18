@@ -6,10 +6,11 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
 import org.springframework.security.config.http.SessionCreationPolicy
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 
 @Configuration
 @EnableWebSecurity
-class WebSecurityConfiguration : WebSecurityConfigurerAdapter() {
+class WebSecurityConfiguration(private val filter: TokenAuthenticationFilter) : WebSecurityConfigurerAdapter() {
 
     override fun configure(http: HttpSecurity) {
        http.cors().and()
@@ -18,6 +19,7 @@ class WebSecurityConfiguration : WebSecurityConfigurerAdapter() {
            .antMatchers("/api/**").hasRole("PLAYER")
            .antMatchers("/api/authentication/**").permitAll()
            .anyRequest().permitAll().and()
+           .addFilterBefore(filter, UsernamePasswordAuthenticationFilter::class.java)
            .formLogin().disable()
            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
     }
