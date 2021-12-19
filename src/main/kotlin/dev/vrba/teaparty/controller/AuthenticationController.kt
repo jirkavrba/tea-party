@@ -12,19 +12,22 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import javax.validation.Valid
+import javax.validation.constraints.Max
+import javax.validation.constraints.Min
+import javax.validation.constraints.NotBlank
 
 @Validated
 @RestController
 @RequestMapping("/api/authentication")
 class AuthenticationController(private val playersService: PlayersService) {
 
-    // TODO: Attribute validation
-    data class CreateAccountRequest(val username: String)
+    data class CreateAccountRequest(@Min(3) @Max(16) @NotBlank val username: String)
 
     data class CreateAccountResponse(val player: PlayerDto, val token: String)
 
     @PostMapping("/create-account")
-    fun createAccount(@RequestBody request: CreateAccountRequest): ResponseEntity<CreateAccountResponse> {
+    fun createAccount(@Valid @RequestBody request: CreateAccountRequest): ResponseEntity<CreateAccountResponse> {
         val account = playersService.createPlayerAccount(request.username)
         val response = CreateAccountResponse(
             player = account.dto(),
