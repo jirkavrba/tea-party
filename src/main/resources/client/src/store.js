@@ -1,4 +1,5 @@
 import {createStore} from "vuex";
+import api from "./api";
 
 export default createStore({
     state: {
@@ -12,6 +13,23 @@ export default createStore({
         setToken(state, token) {
             window.localStorage.setItem("token", token);
             state.token = token;
+        }
+    },
+    actions: {
+        async validateToken(store) {
+            if (store.state.token == null) {
+                return null;
+            }
+
+            const valid = await api.validateToken(store.state.token);
+
+            if (!valid) {
+                await store.commit("setToken", null);
+                return null;
+            }
+
+            return store.state.token;
+
         }
     }
 });
