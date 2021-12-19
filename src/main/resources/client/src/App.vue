@@ -12,6 +12,10 @@
     <v-main>
       <router-view/>
     </v-main>
+
+    <v-overlay v-model="$store.state.loading" class="flex align-center justify-center">
+      <v-icon size="128" color="white" class="mdi-spin">mdi-yin-yang</v-icon>
+    </v-overlay>
   </v-app>
 </template>
 

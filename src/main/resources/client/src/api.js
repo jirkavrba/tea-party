@@ -17,5 +17,9 @@ const authentication = token => ({
 export default {
     validateToken: async (token) => await client.post("/api/authentication/check", {}, authentication(token))
         .then(() => true)
-        .catch(() => false)
+        .catch(() => false),
+
+    createAccount: async (username) => await client.post("/api/authentication/create-account", {username})
+        .then(response => response.data)
+        .catch(() => null)
 };
