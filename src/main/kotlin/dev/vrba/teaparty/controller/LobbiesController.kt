@@ -5,13 +5,10 @@ import dev.vrba.teaparty.domain.game.GameMode
 import dev.vrba.teaparty.dto.LobbyDto
 import dev.vrba.teaparty.dto.dto
 import dev.vrba.teaparty.service.LobbiesService
-import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.*
-import org.springframework.web.server.ResponseStatusException
 import java.util.*
-import javax.websocket.server.PathParam
 
 @RestController
 @RequestMapping("/api/lobbies")
