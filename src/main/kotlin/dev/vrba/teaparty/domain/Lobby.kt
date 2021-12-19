@@ -18,4 +18,6 @@ data class Lobby(
 
     @DBRef
     val players: List<Player>
-)
+) {
+    constructor (mode: GameMode, owner: Player) : this(UUID.randomUUID(), mode, owner, listOf())
+}

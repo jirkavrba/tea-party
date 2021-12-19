@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/api/authentication")
 class AuthenticationController(private val playersService: PlayersService) {
 
+    // TODO: Attribute validation
     data class CreateAccountRequest(val username: String)
 
     data class CreateAccountResponse(val player: PlayerDto, val token: String)
