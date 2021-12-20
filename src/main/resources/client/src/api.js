@@ -23,4 +23,8 @@ export default {
     validateToken: async token => client.post("/api/authentication/check", {}, authentication(token))
         .then(() => true)
         .catch(() => false),
+
+    loadLobbies: async token => client.get("/api/lobbies", authentication(token))
+        .then(response => response.data)
+        .catch(() => []),
 };

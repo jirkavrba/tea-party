@@ -13,7 +13,8 @@ const whileLoading = async (store, callback) => {
 export default new Vuex.Store({
   state: {
     loading: false,
-    token: window.localStorage.getItem("token")
+    token: window.localStorage.getItem("token"),
+    lobbies: []
   },
   mutations: {
     setToken(state, token) {
@@ -22,6 +23,9 @@ export default new Vuex.Store({
     },
     setLoading(state, loading) {
       state.loading = loading;
+    },
+    setLobbies(state, lobbies) {
+      state.lobbies = lobbies;
     }
   },
   actions: {
@@ -39,10 +43,13 @@ export default new Vuex.Store({
     createAccount: async (store, username) => {
       await whileLoading(store, async () => {
         const user = await api.createAccount(username);
-
-        console.log(user);
-
         await store.commit("setToken", user.token);
+      });
+    },
+    loadLobbies: async (store) => {
+      await whileLoading(store, async () => {
+        const lobbies = await api.loadLobbies(store.state.token);
+        await store.commit("setLobbies", lobbies)
       });
     }
   },
