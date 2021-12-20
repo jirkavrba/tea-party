@@ -1,15 +1,15 @@
 <template>
-  <hello-world />
+  <div class="text-center mt-16">
+    <h1>Redirecting...</h1>
+  </div>
 </template>
 
 <script>
-  import HelloWorld from '../components/HelloWorld'
 
   export default {
     name: 'Home',
-
-    components: {
-      HelloWorld,
-    },
+    async mounted() {
+      await this.$store.dispatch("validateToken")
+    }
   }
 </script>
