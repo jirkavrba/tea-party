@@ -35,6 +35,12 @@ export default new Vuex.Store({
 
         await store.commit("setToken", null);
       })
+    },
+    createAccount: async (store, username) => {
+      await whileLoading(store, async () => {
+        await console.log(username);
+      });
+      await store.commit("setLoading", true);
     }
   },
   modules: {

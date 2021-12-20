@@ -9,7 +9,11 @@
   export default {
     name: 'Home',
     async mounted() {
-      await this.$store.dispatch("validateToken")
+      await this.$store.dispatch("validateToken");
+
+      if (this.$store.state.token === null) {
+        await this.$router.replace("/login");
+      }
     }
   }
 </script>
