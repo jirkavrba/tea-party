@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import api from "@/api";
 
 Vue.use(Vuex)
 
@@ -26,8 +27,7 @@ export default new Vuex.Store({
   actions: {
     validateToken: async (store) => {
       await whileLoading(store, async () => {
-        // Try fetching /api/authentication/check
-        const valid = false;
+        const valid = await api.validateToken(store.state.token);
 
         if (valid) {
           return;
@@ -38,9 +38,12 @@ export default new Vuex.Store({
     },
     createAccount: async (store, username) => {
       await whileLoading(store, async () => {
-        await console.log(username);
+        const user = await api.createAccount(username);
+
+        console.log(user);
+
+        await store.commit("setToken", user.token);
       });
-      await store.commit("setLoading", true);
     }
   },
   modules: {
