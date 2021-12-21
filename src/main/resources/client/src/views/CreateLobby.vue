@@ -10,33 +10,33 @@
             Create a new lobby
           </v-card-title>
           <v-card-text>
-            <div class="text-overline my-8">Select game mode</div>
+            <div class="text-overline my-4">Select game mode</div>
             <v-row>
-              <v-col md="4">
+              <v-col cols="12" md="4">
                 <v-card hover :color="selected === 'GreenTea' ? 'green' : 'gray'" :dark="selected === 'GreenTea'" outlined @click="selected = 'GreenTea'">
                   <v-card-text>
-                    <v-icon>mdi-timer-outline</v-icon>
-                    <div class="text-center text-overline">Green tea</div>
+                    <v-icon :color="selected === 'GreenTea' ? '' : 'green' ">mdi-timer-outline</v-icon>
+                    <div :class="`text-center text-overline ${selected === 'GreenTea' ? '' : 'green--text'}`">Green tea</div>
                   </v-card-text>
                 </v-card>
               </v-col>
-              <v-col md="4">
-                  <v-card hover :color="selected === 'YellowTea' ? 'yellow darken-3' : 'gray'" :dark="selected === 'YellowTea'" outlined @click="selected = 'YellowTea'">
+              <v-col cols="12" md="4">
+                  <v-card hover :color="selected === 'YellowTea' ? 'orange' : 'gray'" :dark="selected === 'YellowTea'" outlined @click="selected = 'YellowTea'">
                   <v-card-text>
-                    <v-icon>mdi-abacus</v-icon>
-                    <div class="text-center text-overline">Yellow tea</div>
+                    <v-icon :color="selected === 'YellowTea' ? '' : 'orange'">mdi-abacus</v-icon>
+                    <div :class="`text-center text-overline ${selected === 'YellowTea' ? '' : 'orange--text'}`">Yellow tea</div>
                   </v-card-text>
                 </v-card>
               </v-col>
-              <v-col md="4">
+              <v-col cols="12" md="4">
                   <v-card hover :color="selected === 'RedTea' ? 'red' : 'gray'" :dark="selected === 'RedTea'" outlined @click="selected = 'RedTea'">
                   <v-card-text>
-                    <v-icon>mdi-ruler</v-icon>
-                    <div class="text-center text-overline">Red tea</div>
+                    <v-icon :color="selected === 'RedTea' ? '' : 'red'">mdi-ruler</v-icon>
+                    <div :class="`text-center text-overline ${selected === 'RedTea' ? '' : 'red--text'}`">Red tea</div>
                   </v-card-text>
                 </v-card>
               </v-col>
-              <v-col cols="12" class="mt-4">
+              <v-col cols="12">
                 <v-btn block :disabled="selected === null" color="black" :dark="selected !== null" large @click="createLobby()">Create lobby</v-btn>
               </v-col>
             </v-row>
@@ -58,7 +58,7 @@ export default {
       const lobby = await this.$store.dispatch("createLobby", this.selected);
 
       if (lobby !== null) {
-        await this.$router.push(`/lobby/${lobby.id}`);
+        await this.$router.push({ name: "Lobby", params: { id: lobby.id }});
       }
     }
   }

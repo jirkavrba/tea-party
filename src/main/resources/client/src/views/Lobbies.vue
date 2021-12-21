@@ -4,17 +4,17 @@
       <h1>Lobbies</h1>
       <v-btn :to="{name: 'CreateLobby'}" color="black" dark>Create a new lobby</v-btn>
     </v-col>
-    <v-col cols="12" md="10" offset-md="1" lg="8" offset-lg="2">
+    <v-col cols="10" offset="1" md="10" offset-md="1" lg="10" offset-lg="1" xl="8" offset-xl="2">
       <v-row>
         <v-col v-for="(lobby, i) in lobbies" :key="i" cols="12" md="6" lg="4">
-          <v-card hover :to="{name: 'Lobby', params: { id: lobby.id } }" :color="color(lobby.mode)" dark>
+          <v-card hover :to="{name: 'Lobby', params: { id: lobby.id } }" outlined bo>
             <v-card-title>
-              <v-icon class="mr-3">{{ icon(lobby.mode) }}</v-icon>
+              <v-icon class="mr-3" :color="color(lobby.mode)">{{ icon(lobby.mode) }}</v-icon>
               {{ lobby.owner.username }}'s lobby
             </v-card-title>
             <v-divider></v-divider>
             <v-card-subtitle>
-              <div class="text-overline ml-2">{{ lobby.mode.replace("T", " t") }}</div>
+              <div :class="`text-overline ml-2 ${color(lobby.mode)}--text`">{{ lobby.mode.replace("T", " t") }}</div>
               <code>{{ lobby.id }}</code>
             </v-card-subtitle>
             <v-divider></v-divider>
@@ -38,7 +38,7 @@ export default {
     color(mode) {
       return {
         "GreenTea": "green",
-        "YellowTea": "yellow darken-3",
+        "YellowTea": "orange",
         "RedTea": "red"
       }[mode];
     },
