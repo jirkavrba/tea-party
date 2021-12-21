@@ -20,6 +20,15 @@ const authentication = token => ({
     }
 });
 
+const subscribe = (topic, callback) => {
+    if (!stomp.connected) {
+        stomp.connect({}, () => stomp.subscribe(topic, callback));
+        return;
+    }
+
+    stomp.subscribe(topic, callback);
+};
+
 export default {
     createAccount: async username => client.post("/api/authentication/create-account", {username})
         .then(response => response.data)
@@ -55,11 +64,7 @@ export default {
 
     ws: {
         lobby: (id, callback) => {
-            stomp.connect({}, () => {
-                stomp.subscribe(`/lobby/${id}`, frame => {
-                    callback(frame);
-                });
-            });
+            subscribe(`/lobby/${id}`, frame => callback(frame));
         }
     }
 };

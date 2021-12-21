@@ -48,19 +48,22 @@ export default {
       await this.$router.replace({name: "Lobbies"});
     }
 
-    api.ws.lobby(this.$route.params.id, async frame => {
-      const message = JSON.parse(frame.body);
-
-      if (message.type === "lobby-updated") {
-        await this.$store.commit("setLobby", message.lobby);
-      }
-      else {
-        await this.$store.commit("setLoading", true);
-        await this.$router.replace({name: "Game", params: {id: message.id}});
-      }
-    });
+    await this.connect();
   },
   methods: {
+    async connect() {
+      api.ws.lobby(this.$route.params.id, async frame => {
+        const message = JSON.parse(frame.body);
+
+        if (message.type === "lobby-updated") {
+          await this.$store.commit("setLobby", message.lobby);
+        }
+        else {
+          await this.$store.commit("setLoading", true);
+          await this.$router.replace({name: "Game", params: {id: message.id}});
+        }
+      });
+    },
     async joinLobby() {
       await this.$store.dispatch("joinLobby", this.lobby.id);
     },
