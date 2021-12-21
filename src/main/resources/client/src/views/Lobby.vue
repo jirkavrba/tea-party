@@ -8,7 +8,7 @@
     <v-btn v-else dark large @click="joinLobby()"><v-icon class="mr-2">mdi-login-variant</v-icon> Join this lobby</v-btn>
     </div>
 
-    <v-btn v-if="owner" x-large color="light-green darken-1" dark>
+    <v-btn v-if="owner" x-large color="light-green darken-1" dark @click="startGame()">
       <v-icon>mdi-tea</v-icon>
       <span class="ml-4">Start the game</span>
     </v-btn>
@@ -41,7 +41,7 @@ import api from "@/api";
 
 export default {
   name: "Lobby",
-  async mounted() {
+  async beforeMount() {
     await this.$store.dispatch("loadLobby", this.$route.params.id);
 
     if (this.lobby === null) {
@@ -67,6 +67,9 @@ export default {
     async leaveLobby() {
       await this.$store.dispatch("leaveLobby", this.lobby.id);
       await this.$router.push({name: "Lobbies"});
+    },
+    async startGame() {
+      await this.$store.dispatch("startGame", this.lobby.id);
     }
   },
   computed: {

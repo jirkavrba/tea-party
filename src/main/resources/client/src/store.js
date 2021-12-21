@@ -82,6 +82,11 @@ export default new Vuex.Store({
       await whileLoading(store, async () => {
         await api.leaveLobby(store.state.token, id);
       });
+    },
+    startGame: async (store, id) => {
+      await whileLoading(store, async () => {
+        await api.startGame(store.state.token, id);
+      });
     }
   },
   modules: {

@@ -1,5 +1,6 @@
 package dev.vrba.teaparty.service
 
+import dev.vrba.teaparty.domain.Game
 import dev.vrba.teaparty.domain.Lobby
 import dev.vrba.teaparty.domain.Player
 import dev.vrba.teaparty.domain.game.GameMode
@@ -7,7 +8,9 @@ import dev.vrba.teaparty.dto.dto
 import dev.vrba.teaparty.exceptions.AlreadyJoinedLobbyException
 import dev.vrba.teaparty.exceptions.LobbyNotFoundException
 import dev.vrba.teaparty.exceptions.NotJoinedInLobbyException
+import dev.vrba.teaparty.exceptions.NotLobbyOwnerException
 import dev.vrba.teaparty.repository.LobbiesRepository
+import dev.vrba.teaparty.websocket.GameCreatedMessage
 import dev.vrba.teaparty.websocket.LobbyUpdatedMessage
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.messaging.simp.SimpMessagingTemplate
@@ -17,7 +20,8 @@ import java.util.*
 @Service
 class LobbiesService(
     private val repository: LobbiesRepository,
-    private val template: SimpMessagingTemplate
+    private val template: SimpMessagingTemplate,
+    private val gamesService: GamesService
 ) {
 
     fun listAll(): List<Lobby> = repository.findAll().toList()
@@ -68,4 +72,18 @@ class LobbiesService(
         }
     }
 
+    fun startGame(id: UUID, player: Player): Game {
+        val lobby = repository.findByIdOrNull(id) ?: throw LobbyNotFoundException
+
+        if (lobby.owner != player) {
+            throw NotLobbyOwnerException
+        }
+
+        val game = gamesService.createGame(lobby)
+
+        repository.delete(lobby)
+        template.convertAndSend("/lobby/${lobby.id}", GameCreatedMessage(game.dto()))
+
+        return game
+    }
 }

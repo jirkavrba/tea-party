@@ -2,6 +2,7 @@ package dev.vrba.teaparty.controller
 
 import dev.vrba.teaparty.domain.Player
 import dev.vrba.teaparty.domain.game.GameMode
+import dev.vrba.teaparty.dto.GameDto
 import dev.vrba.teaparty.dto.LobbyDto
 import dev.vrba.teaparty.dto.dto
 import dev.vrba.teaparty.service.LobbiesService
@@ -50,5 +51,13 @@ class LobbiesController(private val service: LobbiesService) {
     fun leaveLobby(@PathVariable("id") id: UUID, @AuthenticationPrincipal player: Player): ResponseEntity<*> {
         service.leaveLobby(id, player)
         return ResponseEntity.ok(mapOf("message" to "Left the lobby"))
+    }
+
+    @PostMapping("/{id}/start")
+    fun startGame(@PathVariable("id") id: UUID, @AuthenticationPrincipal player: Player): ResponseEntity<GameDto> {
+        val game = service.startGame(id, player)
+        val dto = game.dto()
+
+        return ResponseEntity.ok(dto)
     }
 }
