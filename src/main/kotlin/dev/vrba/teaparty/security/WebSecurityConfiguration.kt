@@ -20,6 +20,7 @@ class WebSecurityConfiguration(private val filter: TokenAuthenticationFilter) : 
            .authorizeRequests()
            .antMatchers("/api/authentication/**").permitAll()
            .antMatchers("/api/**").hasRole("PLAYER")
+           .antMatchers("/websocket").permitAll()
            .anyRequest().permitAll().and()
            .addFilterBefore(filter, UsernamePasswordAuthenticationFilter::class.java)
            .formLogin().disable()

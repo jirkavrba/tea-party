@@ -24,6 +24,8 @@
 </template>
 
 <script>
+import api from "@/api";
+
 export default {
   name: "Lobby",
   async mounted() {
@@ -32,6 +34,11 @@ export default {
     if (this.lobby === null) {
       await this.$router.replace({name: "Lobbies"});
     }
+
+    api.ws.lobby(this.$route.params.id, async frame => {
+      const message = JSON.parse(frame.body);
+      await this.$store.commit("setLobby", message.lobby);
+    });
   },
   methods: {
     async joinLobby() {

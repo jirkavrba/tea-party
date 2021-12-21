@@ -1,4 +1,6 @@
 import axios from "axios";
+import SockJS from "sockjs-client";
+import {Stomp} from "@stomp/stompjs";
 
 // TODO: Make this env dependent
 const api = "http://localhost:8080";
@@ -8,6 +10,9 @@ const client = axios.create({
         "Content-Type": "application/json"
     }
 });
+
+const socket = new SockJS(`${api}/websocket`);
+const stomp = Stomp.over(socket);
 
 const authentication = token => ({
     headers: {
@@ -43,4 +48,14 @@ export default {
     leaveLobby: async (token, id) => client.post(`/api/lobbies/${id}/leave`, {}, authentication(token))
         .then(response => response.data)
         .catch(() => null),
+
+    ws: {
+        lobby: (id, callback) => {
+            stomp.connect({}, () => {
+                stomp.subscribe(`/lobby/${id}`, frame => {
+                    callback(frame);
+                });
+            });
+        }
+    }
 };
