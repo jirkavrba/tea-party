@@ -29,10 +29,16 @@
 </template>
 
 <script>
+import api from "@/api";
+
 export default {
   name: "Lobbies",
   async mounted() {
     await this.$store.dispatch("loadLobbies");
+    api.ws.lobbies(update => {
+      const message = JSON.parse(update.body);
+      this.$store.commit("setLobbies", message.lobbies);
+    })
   },
   methods: {
     color(mode) {

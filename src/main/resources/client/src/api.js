@@ -65,7 +65,7 @@ export default {
         .catch(() => null),
 
     ws: {
-        lobbies: (id, callback) => subscribe("/lobbies", frame => callback(frame)),
+        lobbies: (callback) => subscribe("/lobbies", frame => callback(frame)),
         lobby: (id, callback) => subscribe(`/lobby/${id}`, frame => callback(frame)),
     }
 };
