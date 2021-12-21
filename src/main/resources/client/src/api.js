@@ -21,6 +21,8 @@ const authentication = token => ({
 });
 
 const subscribe = (topic, callback) => {
+    console.log(`Subscribing to topic ${topic}`)
+
     if (!stomp.connected) {
         stomp.connect({}, () => stomp.subscribe(topic, callback));
         return;
@@ -63,8 +65,7 @@ export default {
         .catch(() => null),
 
     ws: {
-        lobby: (id, callback) => {
-            subscribe(`/lobby/${id}`, frame => callback(frame));
-        }
+        lobbies: (id, callback) => subscribe("/lobbies", frame => callback(frame)),
+        lobby: (id, callback) => subscribe(`/lobby/${id}`, frame => callback(frame)),
     }
 };
