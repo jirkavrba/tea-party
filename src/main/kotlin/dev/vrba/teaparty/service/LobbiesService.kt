@@ -10,8 +10,9 @@ import dev.vrba.teaparty.exceptions.LobbyNotFoundException
 import dev.vrba.teaparty.exceptions.NotJoinedInLobbyException
 import dev.vrba.teaparty.exceptions.NotLobbyOwnerException
 import dev.vrba.teaparty.repository.LobbiesRepository
-import dev.vrba.teaparty.websocket.GameCreatedMessage
-import dev.vrba.teaparty.websocket.LobbyUpdatedMessage
+import dev.vrba.teaparty.websocket.messages.GameCreatedMessage
+import dev.vrba.teaparty.websocket.messages.LobbiesUpdatedMessage
+import dev.vrba.teaparty.websocket.messages.LobbyUpdatedMessage
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.messaging.simp.SimpMessagingTemplate
 import org.springframework.stereotype.Service
@@ -30,7 +31,11 @@ class LobbiesService(
 
     fun createLobby(mode: GameMode, owner: Player): Lobby {
         val lobby = Lobby(mode, owner)
-        return repository.save(lobby)
+
+        repository.save(lobby)
+        template.convertAndSend("/lobbies", LobbiesUpdatedMessage(repository.findAll().map { it.dto() }))
+
+        return lobby
     }
 
     fun findLobby(id: UUID): Lobby = repository.findByIdOrNull(id) ?: throw LobbyNotFoundException
@@ -60,6 +65,7 @@ class LobbiesService(
         // If there are no players in the lobby, delete it
         if (players.isEmpty()) {
             repository.delete(lobby)
+            template.convertAndSend("/lobbies", LobbiesUpdatedMessage(repository.findAll().map { it.dto() }))
             return null
         }
 
