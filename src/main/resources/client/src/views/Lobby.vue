@@ -41,7 +41,7 @@ import api from "@/api";
 
 export default {
   name: "Lobby",
-  async beforeMount() {
+  async mounted() {
     await this.$store.dispatch("loadLobby", this.$route.params.id);
 
     if (this.lobby === null) {

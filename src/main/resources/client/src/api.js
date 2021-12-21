@@ -12,7 +12,7 @@ const client = axios.create({
 });
 
 const socket = new SockJS(`${api}/websocket`);
-const stomp = () => Stomp.over(socket);
+const stomp = Stomp.over(socket);
 
 const authentication = token => ({
     headers: {
@@ -55,10 +55,8 @@ export default {
 
     ws: {
         lobby: (id, callback) => {
-            console.log("Opening a new lobby websocket connection");
-            const client = stomp()
-            client.connect({}, () => {
-                client.subscribe(`/lobby/${id}`, frame => {
+            stomp.connect({}, () => {
+                stomp.subscribe(`/lobby/${id}`, frame => {
                     callback(frame);
                 });
             });
