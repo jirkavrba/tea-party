@@ -37,7 +37,7 @@
                 </v-card>
               </v-col>
               <v-col cols="12" class="mt-4">
-                <v-btn block :disabled="selected === null" color="black" dark large>Create lobby</v-btn>
+                <v-btn block :disabled="selected === null" color="black" :dark="selected !== null" large @click="createLobby()">Create lobby</v-btn>
               </v-col>
             </v-row>
           </v-card-text>
@@ -52,6 +52,15 @@ export default {
   name: "CreateLobby",
   data: () => ({
     selected: null
-  })
+  }),
+  methods: {
+    async createLobby() {
+      const lobby = await this.$store.dispatch("createLobby", this.selected);
+
+      if (lobby !== null) {
+        await this.$router.push(`/lobby/${lobby.id}`);
+      }
+    }
+  }
 }
 </script>

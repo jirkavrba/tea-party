@@ -27,4 +27,8 @@ export default {
     loadLobbies: async token => client.get("/api/lobbies", authentication(token))
         .then(response => response.data)
         .catch(() => []),
+
+    createLobby: async (token, mode) => client.post("/api/lobbies/create", {mode}, authentication(token))
+        .then(response => response.data)
+        .catch(() => null),
 };

@@ -6,8 +6,10 @@ Vue.use(Vuex)
 
 const whileLoading = async (store, callback) => {
   await store.commit("setLoading", true);
-  await callback();
+  const result = await callback();
   await store.commit("setLoading", false);
+
+  return result;
 }
 
 export default new Vuex.Store({
@@ -51,6 +53,9 @@ export default new Vuex.Store({
         const lobbies = await api.loadLobbies(store.state.token);
         await store.commit("setLobbies", lobbies)
       });
+    },
+    createLobby: async (store, mode) => {
+      return await whileLoading(store, async () =>  await api.createLobby(store.state.token, mode));
     }
   },
   modules: {
