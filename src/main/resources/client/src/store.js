@@ -72,6 +72,16 @@ export default new Vuex.Store({
         const lobby = await api.loadLobby(store.state.token, id);
         await store.commit("setLobby", lobby);
       });
+    },
+    joinLobby: async (store, id) => {
+      await whileLoading(store, async () => {
+        await api.joinLobby(store.state.token, id);
+      });
+    },
+    leaveLobby: async (store, id) => {
+      await whileLoading(store, async () => {
+        await api.leaveLobby(store.state.token, id);
+      });
     }
   },
   modules: {

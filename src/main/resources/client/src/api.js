@@ -35,4 +35,12 @@ export default {
     loadLobby: async (token, id) => client.get("/api/lobbies/" + id, authentication(token))
         .then(response => response.data)
         .catch(() => null),
+
+    joinLobby: async (token, id) => client.post(`/api/lobbies/${id}/join`, {}, authentication(token))
+        .then(response => response.data)
+        .catch(() => null),
+
+    leaveLobby: async (token, id) => client.post(`/api/lobbies/${id}/leave`, {}, authentication(token))
+        .then(response => response.data)
+        .catch(() => null),
 };
