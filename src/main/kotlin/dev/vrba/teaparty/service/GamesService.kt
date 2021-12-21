@@ -4,7 +4,6 @@ import dev.vrba.teaparty.domain.Game
 import dev.vrba.teaparty.domain.Lobby
 import dev.vrba.teaparty.repository.GamesRepository
 import org.springframework.stereotype.Service
-import java.util.*
 
 @Service
 class GamesService(private val repository: GamesRepository) {
@@ -14,4 +13,6 @@ class GamesService(private val repository: GamesRepository) {
             repository.save(it)
         }
     }
+
+    fun deleteAllGames() = repository.deleteAll()
 }
