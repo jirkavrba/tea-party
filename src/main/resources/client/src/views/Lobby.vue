@@ -50,7 +50,14 @@ export default {
 
     api.ws.lobby(this.$route.params.id, async frame => {
       const message = JSON.parse(frame.body);
-      await this.$store.commit("setLobby", message.lobby);
+
+      if (message.type === "lobby-updated") {
+        await this.$store.commit("setLobby", message.lobby);
+      }
+      else {
+        await this.$store.commit("setLoading", true);
+        await this.$router.replace({name: "Game", params: {id: message.id}});
+      }
     });
   },
   methods: {
