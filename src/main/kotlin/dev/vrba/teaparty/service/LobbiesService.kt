@@ -22,6 +22,8 @@ class LobbiesService(
 
     fun listAll(): List<Lobby> = repository.findAll().toList()
 
+    fun deleteAll() = repository.deleteAll()
+
     fun createLobby(mode: GameMode, owner: Player): Lobby {
         val lobby = Lobby(mode, owner)
         return repository.save(lobby)
