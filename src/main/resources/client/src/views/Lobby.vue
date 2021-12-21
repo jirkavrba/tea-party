@@ -1,6 +1,7 @@
 <template>
   <div v-if="lobby !== null" class="text-center mt-16">
-    <h1 class="mb-4">{{ lobby.owner.username }}'s lobby</h1>
+    <h1>{{ lobby.owner.username }}'s lobby</h1>
+    <h2 class="mb-8 text-overline grey--text">Playing <span class="black--text">{{ lobby.mode.replace("T", " t") }}</span> mode</h2>
 
     <v-btn v-if="joined" dark color="red" large @click="leaveLobby()"><v-icon class="mr-2">mdi-logout-variant</v-icon> Leave this lobby</v-btn>
     <v-btn v-else dark large @click="joinLobby()"><v-icon class="mr-2">mdi-login-variant</v-icon> Join this lobby</v-btn>
@@ -15,6 +16,7 @@
               </v-icon>
               <span class="ml-3">{{ player.username }}</span>
               <v-chip color="black" dark class="ml-3" v-if="lobby.owner.id === player.id">host</v-chip>
+              <v-chip color="primary" dark class="ml-3" v-if="$store.state.player === player.id">it's you</v-chip>
             </v-card-title>
           </v-card>
         </v-col>
