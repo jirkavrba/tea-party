@@ -1,15 +1,26 @@
 <template>
   <div v-if="lobby !== null" class="text-center mt-16">
     <h1>{{ lobby.owner.username }}'s lobby</h1>
-    <h2 class="mb-8 text-overline grey--text">Playing <span class="black--text">{{ lobby.mode.replace("T", " t") }}</span> mode</h2>
+    <h2 class="mb-4 text-overline grey--text">Playing <span class="black--text">{{ lobby.mode.replace("T", " t") }}</span> mode</h2>
 
-    <v-btn v-if="joined" dark color="red" large @click="leaveLobby()"><v-icon class="mr-2">mdi-logout-variant</v-icon> Leave this lobby</v-btn>
+    <div class="my-8 text-center">
+    <v-btn v-if="joined" dark :color="owner ? 'black' : 'red'" large @click="leaveLobby()"><v-icon class="mr-2">mdi-logout-variant</v-icon> Leave this lobby</v-btn>
     <v-btn v-else dark large @click="joinLobby()"><v-icon class="mr-2">mdi-login-variant</v-icon> Join this lobby</v-btn>
+    </div>
+
+    <v-btn v-if="owner" x-large color="light-green darken-1" dark>
+      <v-icon>mdi-tea</v-icon>
+      <span class="ml-4">Start the game</span>
+    </v-btn>
+    <h3 v-else class="grey--text text--darken-1">
+      <v-icon class="mr-4">mdi-account-clock</v-icon>
+      Waiting for the lobby host to start the game...
+    </h3>
 
     <v-container>
       <v-row class="mt-16">
         <v-col v-for="(player, i) in lobby.players" :key="i" cols="12" sm="6" md="4" lg="3" xl="2">
-          <v-card outlined flat>
+          <v-card outlined flat rounded>
             <v-card-title>
               <v-icon size="24" :color="lobby.owner.id === player.id ? 'black' : 'gray'">
                 {{ lobby.owner.id === player.id ? 'mdi-emoticon-cool-outline' : 'mdi-emoticon-happy-outline' }}
