@@ -21,14 +21,18 @@ export default {
         .catch(() => null),
 
     validateToken: async token => client.post("/api/authentication/check", {}, authentication(token))
-        .then(() => true)
-        .catch(() => false),
+        .then(response => response.data)
+        .catch(() => null),
 
     loadLobbies: async token => client.get("/api/lobbies", authentication(token))
         .then(response => response.data)
         .catch(() => []),
 
     createLobby: async (token, mode) => client.post("/api/lobbies/create", {mode}, authentication(token))
+        .then(response => response.data)
+        .catch(() => null),
+
+    loadLobby: async (token, id) => client.get("/api/lobbies/" + id, authentication(token))
         .then(response => response.data)
         .catch(() => null),
 };

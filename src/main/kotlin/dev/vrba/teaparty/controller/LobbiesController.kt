@@ -22,6 +22,14 @@ class LobbiesController(private val service: LobbiesService) {
         return ResponseEntity.ok(dtos)
     }
 
+    @GetMapping("/{id}")
+    fun lobby(@PathVariable("id") id: UUID): ResponseEntity<LobbyDto> {
+        val lobby = service.findLobby(id)
+        val dto =  lobby.dto()
+
+        return ResponseEntity.ok(dto)
+    }
+
     data class CreateLobbyRequest(val mode: GameMode)
 
     @PostMapping("/create")

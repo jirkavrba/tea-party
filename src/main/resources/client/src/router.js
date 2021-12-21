@@ -1,9 +1,11 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Login from "@/views/Login.vue";
-import Lobbies from "@/views/Lobbies.vue";
 import store from "./store";
+
+import Login from "@/views/Login";
+import Lobbies from "@/views/Lobbies";
 import CreateLobby from "@/views/CreateLobby";
+import Lobby from "@/views/Lobby";
 
 Vue.use(VueRouter)
 
@@ -30,7 +32,8 @@ const routes = [
     },
     {
         name: "Lobby",
-        path: "/lobby/:id"
+        path: "/lobby/:id",
+        component: Lobby
     }
 ]
 

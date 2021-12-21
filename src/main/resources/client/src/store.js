@@ -15,31 +15,41 @@ const whileLoading = async (store, callback) => {
 export default new Vuex.Store({
   state: {
     loading: false,
+    player: null,
     token: window.localStorage.getItem("token"),
-    lobbies: []
+    lobbies: [],
+    lobby: null
   },
   mutations: {
     setToken(state, token) {
       state.token = token;
       window.localStorage.setItem("token", token);
     },
+    setPlayer(state, player) {
+      state.player = player;
+    },
     setLoading(state, loading) {
       state.loading = loading;
     },
     setLobbies(state, lobbies) {
       state.lobbies = lobbies;
+    },
+    setLobby(state, lobby) {
+      state.lobby = lobby;
     }
   },
   actions: {
     validateToken: async (store) => {
       await whileLoading(store, async () => {
-        const valid = await api.validateToken(store.state.token);
+        const validation = await api.validateToken(store.state.token);
 
-        if (valid) {
+        if (validation !== null) {
+          await store.commit("setPlayer", validation.id);
           return;
         }
 
         await store.commit("setToken", null);
+        await store.commit("setPlayer", null);
       })
     },
     createAccount: async (store, username) => {
@@ -56,6 +66,12 @@ export default new Vuex.Store({
     },
     createLobby: async (store, mode) => {
       return await whileLoading(store, async () =>  await api.createLobby(store.state.token, mode));
+    },
+    loadLobby: async (store, id) => {
+      await whileLoading(store, async () => {
+        const lobby = await api.loadLobby(store.state.token, id);
+        await store.commit("setLobby", lobby);
+      });
     }
   },
   modules: {

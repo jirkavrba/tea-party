@@ -29,6 +29,8 @@ class LobbiesService(
         return repository.save(lobby)
     }
 
+    fun findLobby(id: UUID): Lobby = repository.findByIdOrNull(id) ?: throw LobbyNotFoundException
+
     fun joinLobby(id: UUID, player: Player): Lobby {
         val lobby = repository.findByIdOrNull(id) ?: throw LobbyNotFoundException
 
