@@ -7,13 +7,30 @@
       </v-overlay>
     </v-fade-transition>
     <v-container v-if="this.connection !== null">
-      <h1>Game</h1>
       <v-row>
-        <v-col cols="12" md="8"></v-col>
+        <v-col cols="12" md="8">
+          <v-card class="d-flex flex-column" style="min-height: 90vh">
+            <v-card-title>Game</v-card-title>
+            <v-card-subtitle class="text-overline">
+              Playing
+              <span class="black--text">{{ game.mode.replace("T", " t") }}</span>
+            </v-card-subtitle>
+            <v-divider/>
+            <v-card-text class="flex-grow-1">
+            </v-card-text>
+            <v-divider/>
+            <v-card-text class="d-flex flex-row align-stretch">
+              <v-text-field outlined class="flex-grow-1"></v-text-field>
+              <v-btn color="primary" class="ml-2" icon x-large>
+                <v-icon>mdi-chevron-double-right</v-icon>
+              </v-btn>
+            </v-card-text>
+          </v-card>
+        </v-col>
         <v-col cols="12" md="4">
           <v-card>
             <v-card-title>Score</v-card-title>
-            <v-card-subtitle>Once one of the players hits <strong>50</strong> points, the game ends</v-card-subtitle>
+            <v-card-subtitle class="text-overline">Once one of the players hits <strong>50</strong> points, the game ends</v-card-subtitle>
             <v-divider/>
             <v-card-text>
               <v-row>
