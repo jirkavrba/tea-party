@@ -2,8 +2,10 @@ import axios from "axios";
 import SockJS from "sockjs-client";
 import {Stomp} from "@stomp/stompjs";
 
-// TODO: Make this env dependent
-const api = "http://localhost:8080";
+const api = process.env.NODE_ENV === "production"
+    ? window.location.href.replace(window.location.hash, "")
+    : "http://localhost:8080";
+
 const client = axios.create({
     baseURL: api,
     headers: {
