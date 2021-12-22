@@ -15,7 +15,7 @@
               <v-col cols="12" md="4">
                 <v-card hover :color="selected === 'GreenTea' ? 'green' : 'gray'" :dark="selected === 'GreenTea'" outlined @click="selected = 'GreenTea'">
                   <v-card-text>
-                    <v-icon :color="selected === 'GreenTea' ? '' : 'green' ">mdi-timer-outline</v-icon>
+                    <v-icon :color="selected === 'GreenTea' ? '' : 'green'" size="32">mdi-timer-outline</v-icon>
                     <div :class="`text-center text-overline ${selected === 'GreenTea' ? '' : 'green--text'}`">Green tea</div>
                   </v-card-text>
                 </v-card>
@@ -23,7 +23,7 @@
               <v-col cols="12" md="4">
                   <v-card hover :color="selected === 'YellowTea' ? 'orange' : 'gray'" :dark="selected === 'YellowTea'" outlined @click="selected = 'YellowTea'">
                   <v-card-text>
-                    <v-icon :color="selected === 'YellowTea' ? '' : 'orange'">mdi-abacus</v-icon>
+                    <v-icon :color="selected === 'YellowTea' ? '' : 'orange'" size="32">mdi-abacus</v-icon>
                     <div :class="`text-center text-overline ${selected === 'YellowTea' ? '' : 'orange--text'}`">Yellow tea</div>
                   </v-card-text>
                 </v-card>
@@ -31,7 +31,7 @@
               <v-col cols="12" md="4">
                   <v-card hover :color="selected === 'RedTea' ? 'red' : 'gray'" :dark="selected === 'RedTea'" outlined @click="selected = 'RedTea'">
                   <v-card-text>
-                    <v-icon :color="selected === 'RedTea' ? '' : 'red'">mdi-ruler</v-icon>
+                    <v-icon :color="selected === 'RedTea' ? '' : 'red'" size="32">mdi-ruler</v-icon>
                     <div :class="`text-center text-overline ${selected === 'RedTea' ? '' : 'red--text'}`">Red tea</div>
                   </v-card-text>
                 </v-card>

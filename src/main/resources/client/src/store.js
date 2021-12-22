@@ -18,7 +18,8 @@ export default new Vuex.Store({
     player: null,
     token: window.localStorage.getItem("token"),
     lobbies: [],
-    lobby: null
+    lobby: null,
+    game: null
   },
   mutations: {
     setToken(state, token) {
@@ -36,6 +37,9 @@ export default new Vuex.Store({
     },
     setLobby(state, lobby) {
       state.lobby = lobby;
+    },
+    setGame(state, game) {
+      state.game = game;
     }
   },
   actions: {
@@ -87,6 +91,12 @@ export default new Vuex.Store({
       await whileLoading(store, async () => {
         await api.startGame(store.state.token, id);
       });
+    },
+    loadGame: async (store, id) => {
+      await whileLoading(store, async () => {
+        const game = await api.loadGame(store.state.token, id);
+        await store.commit("setGame", game);
+      })
     }
   },
   modules: {
