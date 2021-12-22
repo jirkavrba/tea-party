@@ -60,7 +60,7 @@ export default {
         }
         else {
           await this.$store.commit("setLoading", true);
-          await this.$router.replace({name: "Game", params: {id: message.id}});
+          await this.$router.replace({name: "Game", params: {id: message.game.id}});
         }
       });
     },

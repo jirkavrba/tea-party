@@ -63,6 +63,10 @@ export default {
         .then(response => response.data)
         .catch(() => null),
 
+    loadGame: async (token, id) => client.get(`/api/games/${id}`, authentication(token))
+        .then(response => response.data)
+        .catch(() => null),
+
     ws: {
         lobbies: (callback) => subscribe("/lobbies", frame => callback(frame)),
         lobby: (id, callback) => subscribe(`/lobby/${id}`, frame => callback(frame)),
