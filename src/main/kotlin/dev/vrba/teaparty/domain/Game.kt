@@ -16,6 +16,5 @@ data class Game(
     @DBRef
     val players: List<Player>,
 
-    @DBRef
-    val results: Map<Player, Int>? = null
+    val scores: Map<UUID, Int>
 )

@@ -16,7 +16,11 @@ class GamesService(private val repository: GamesRepository) {
     fun deleteAllGames() = repository.deleteAll()
 
     fun createGame(lobby: Lobby): Game {
-        return Game(mode = lobby.mode, players = lobby.players).let {
+        return Game(
+            mode = lobby.mode,
+            players = lobby.players,
+            scores = lobby.players.associate { it.id to 0 }
+        ).let {
             repository.save(it)
         }
     }

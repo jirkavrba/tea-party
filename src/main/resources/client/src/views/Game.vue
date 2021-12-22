@@ -8,6 +8,29 @@
     </v-fade-transition>
     <v-container v-if="this.connection !== null">
       <h1>Game</h1>
+      <v-row>
+        <v-col cols="12" md="8"></v-col>
+        <v-col cols="12" md="4">
+          <v-card>
+            <v-card-title>Score</v-card-title>
+            <v-card-subtitle>Once one of the players hits <strong>50</strong> points, the game ends</v-card-subtitle>
+            <v-divider/>
+            <v-card-text>
+              <v-row>
+                <v-col v-for="(entry, i) in scores" cols="12" :key="i">
+                  <v-card outlined>
+                    <v-card-text class="d-flex flex-row align-center">
+                      <strong class="text-h5 primary--text">{{ entry.score }}</strong>
+                      <v-divider vertical class="mx-4"/>
+                      <span class="text-overline">{{ player(entry.player).username }}</span>
+                    </v-card-text>
+                  </v-card>
+                </v-col>
+              </v-row>
+            </v-card-text>
+          </v-card>
+        </v-col>
+      </v-row>
     </v-container>
   </div>
 </template>
@@ -33,6 +56,19 @@ export default {
       const message = JSON.parse(frame.body);
       console.log(message);
     });
+  },
+  methods: {
+    player(id) {
+      return this.game.players.find(player => player.id === id);
+    },
+  },
+  computed: {
+    scores: function () {
+      return [...this.game.scores].sort((a, b) => a.score - b.score);
+    },
+    game: function () {
+      return this.$store.state.game;
+    }
   }
 }
 </script>

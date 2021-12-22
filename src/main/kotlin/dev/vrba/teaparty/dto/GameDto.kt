@@ -7,11 +7,17 @@ import java.util.*
 fun Game.dto(): GameDto = GameDto(
     id,
     mode,
-    players.map { it.dto() }
+    players.map { it.dto() },
+    scores.toList()
+        .map { (player, score) -> Score(player, score) }
+        .sortedByDescending { it.score }
 )
+
+data class Score(val player: UUID, val score: Int)
 
 data class GameDto(
     val id: UUID,
     val mode: GameMode,
-    val players: List<PlayerDto>
+    val players: List<PlayerDto>,
+    val scores: List<Score>
 )
