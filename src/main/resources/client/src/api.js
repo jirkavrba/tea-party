@@ -19,16 +19,17 @@ const authentication = token => ({
     }
 });
 
-const subscribe = (topic, callback) => {
-    console.log(`Subscribing to topic ${topic}`)
-
+const whenConnected = callback => {
     if (!stomp.connected) {
-        stomp.connect({}, () => stomp.subscribe(topic, callback));
+        stomp.connect({}, callback);
         return;
     }
 
-    stomp.subscribe(topic, callback);
-};
+    callback();
+}
+
+const send = (topic, message) => whenConnected(() => stomp.send(topic, {}, JSON.stringify(message)));
+const subscribe = (topic, callback) => whenConnected(() => stomp.subscribe(topic, callback));
 
 export default {
     createAccount: async username => client.post("/api/authentication/create-account", {username})
@@ -70,5 +71,9 @@ export default {
     ws: {
         lobbies: (callback) => subscribe("/lobbies", frame => callback(frame)),
         lobby: (id, callback) => subscribe(`/lobby/${id}`, frame => callback(frame)),
+        game: (id) => ({
+            send: (message) => send(`/game/${id}`, message),
+            subscribe: (callback) => subscribe(`/game/${id}`, frame => callback(frame)),
+        })
     }
 };
