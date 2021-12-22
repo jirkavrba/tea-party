@@ -9,11 +9,10 @@ FROM gradle:alpine AS backend
 RUN mkdir /build
 COPY . /build
 RUN rm -rf /build/main/resources/static
-COPY --from=frontend /build/dist /build/src/main/resources/
-RUN mv /build/src/main/resources/static/dist /build/main/resources/static
-RUN mv /build/src/main/resources/static/index.html /build/main/resources/templates/index.html
-WORKDIR /build
+COPY --from=frontend /build/dist /build/src/main/resources/static/
+RUN mv /build/src/main/resources/static/index.html /build/src/main/resources/templates/index.html
 RUN rm -rf /build/src/main/resources/client
+WORKDIR /build
 RUN gradle bootJar
 
 FROM openjdk:17-slim

@@ -14,5 +14,8 @@ data class Game(
     val mode: GameMode,
 
     @DBRef
-    val players: List<Player>
+    val players: List<Player>,
+
+    @DBRef
+    val results: Map<Player, Int>? = null
 )
