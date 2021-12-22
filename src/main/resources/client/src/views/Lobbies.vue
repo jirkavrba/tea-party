@@ -2,7 +2,10 @@
   <v-row>
     <v-col class="text-center mt-16" cols="12">
       <h1>Lobbies</h1>
-      <v-btn :to="{name: 'CreateLobby'}" color="black" dark>Create a new lobby</v-btn>
+      <v-btn :to="{name: 'CreateLobby'}" color="black" dark x-large class="my-4">
+        <v-icon class="mr-4">mdi-account-group</v-icon>
+        Create a new lobby
+      </v-btn>
     </v-col>
     <v-col cols="10" offset="1" md="10" offset-md="1" lg="10" offset-lg="1" xl="8" offset-xl="2">
       <v-row>
