@@ -11,8 +11,7 @@ const client = axios.create({
     }
 });
 
-const socket = new SockJS(`${api}/websocket`);
-const stomp = Stomp.over(socket);
+const stomp = Stomp.over(() => new SockJS(`${api}/websocket`));
 
 const authentication = token => ({
     headers: {
