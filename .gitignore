@@ -35,3 +35,7 @@ out/
 
 ### VS Code ###
 .vscode/
+
+# Built frontend files
+/src/main/resources/static/dist
+/src/main/resources/templates/index.html
