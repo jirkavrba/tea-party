@@ -3,7 +3,7 @@ import SockJS from "sockjs-client";
 import {Stomp} from "@stomp/stompjs";
 
 const api = process.env.NODE_ENV === "production"
-    ? window.location.href.replace(window.location.hash, "")
+    ? window.location.href.replace(window.location.hash, "").replace(/\/$/, "")
     : "http://localhost:8080";
 
 const client = axios.create({
