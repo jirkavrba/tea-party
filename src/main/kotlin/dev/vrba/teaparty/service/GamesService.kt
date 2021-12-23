@@ -4,11 +4,14 @@ import dev.vrba.teaparty.domain.Game
 import dev.vrba.teaparty.domain.Lobby
 import dev.vrba.teaparty.domain.Player
 import dev.vrba.teaparty.domain.game.GameRound
+import dev.vrba.teaparty.domain.game.ScoredWord
+import dev.vrba.teaparty.domain.game.SubmittedWord
 import dev.vrba.teaparty.dto.dto
 import dev.vrba.teaparty.exceptions.GameNotFoundException
 import dev.vrba.teaparty.exceptions.NotJoinedInGameException
 import dev.vrba.teaparty.repository.GamesRepository
 import dev.vrba.teaparty.websocket.messages.GameUpdatedMessage
+import dev.vrba.teaparty.websocket.messages.ScoredWordSubmittedMessage
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.messaging.simp.SimpMessagingTemplate
 import org.springframework.scheduling.TaskScheduler
@@ -19,6 +22,7 @@ import java.util.*
 
 @Service
 class GamesService(
+    private val scoringService: WordScoringService,
     private val repository: GamesRepository,
     private val template: SimpMessagingTemplate,
     private val scheduler: TaskScheduler
@@ -47,6 +51,17 @@ class GamesService(
         return game
     }
 
+    fun submitWord(id: UUID, player: Player, word: String) {
+        val game = repository.findByIdOrNull(id) ?: return
+        val round = game.round ?: return
+
+        val submitted = SubmittedWord(word, player.id, Instant.now())
+        val scored = scoringService.score(round.mode, submitted, round.words)
+
+        game.copy(round = round.copy(words = round.words + scored)).let { repository.save(it) }
+        broadcastScoredWord(game, scored)
+    }
+
     private fun scheduleNextRound(game: Game) {
         val runnable = {
             game.copy(round = createNewRound(game)).let {
@@ -71,6 +86,13 @@ class GamesService(
         val end = start + Duration.ofSeconds(15)
 
         return GameRound(start = start, end = end, mode = game.mode, syllable = syllable, listOf())
+    }
+
+    private fun broadcastScoredWord(game: Game, word: ScoredWord) {
+        val topic = "/game/${game.id}"
+        val message = ScoredWordSubmittedMessage(word)
+
+        template.convertAndSend(topic, message)
     }
 
     private fun broadcastGameUpdate(game: Game) {

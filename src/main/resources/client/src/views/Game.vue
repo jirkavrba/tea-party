@@ -33,7 +33,7 @@
             <v-divider/>
             <v-card-text class="d-flex flex-row align-stretch">
               <v-text-field outlined class="flex-grow-1" hint="Tip: You can use enter to submit the word" v-model="word"
-                            :persistent-hint="true" autofocus @submit="submitWord()"></v-text-field>
+                            :persistent-hint="true" autofocus @keydown.enter="submitWord()"></v-text-field>
               <v-btn color="primary" class="ml-2" icon x-large @click="submitWord()">
                 <v-icon>mdi-chevron-double-right</v-icon>
               </v-btn>
@@ -74,7 +74,8 @@ export default {
     connection: null,
     hook: null,
     time: 0,
-    word: ""
+    word: "",
+    words: []
   }),
   async mounted() {
     await this.$store.dispatch("loadGame", this.$route.params.id);
@@ -115,6 +116,7 @@ export default {
     submitWord() {
       if (this.word.trim() !== "") {
         this.connection.send(this.$store.state.token, { word: this.word, })
+        this.word = "";
       }
     },
     player(id) {

@@ -1,7 +1,7 @@
 <template>
   <div class="text-center mt-16">
     <v-row class="mt-16">
-      <v-col offset="1" offset-md="3" offset-lg="4" md="6" lg="4" cols="10">
+      <v-col offset="1" offset-md="2" offset-lg="3" md="8" lg="6" cols="10">
         <v-card>
           <v-card-title>
             <router-link :to="{name: 'Lobbies'}" class="mr-4">
