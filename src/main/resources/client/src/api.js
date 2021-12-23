@@ -32,6 +32,7 @@ const whenConnected = callback => {
 
 const send = (topic, message) => whenConnected(() => stomp.send(topic, {}, JSON.stringify(message)));
 const subscribe = (topic, callback) => whenConnected(() => stomp.subscribe(topic, callback));
+const unsubscribe = (topic) => whenConnected(() => stomp.unsubscribe(topic));
 
 export default {
     createAccount: async username => client.post("/api/authentication/create-account", {username})
@@ -76,6 +77,7 @@ export default {
         game: (id) => ({
             send: (message) => send(`/game/${id}`, message),
             subscribe: (callback) => subscribe(`/game/${id}`, frame => callback(frame)),
+            unsubscribe: () => unsubscribe(`/game/${id}`)
         })
     }
 };

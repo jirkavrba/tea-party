@@ -17,9 +17,9 @@
             <v-divider v-if="game.round !== null"/>
             <v-card-text v-if="game.round !== null">
               <div class="text-overline">
-                <h2 class="grey--text">Type in a word containing <strong class="primary--text">SYL</strong></h2>
+                <h2 class="grey--text">Type in a word containing <strong class="primary--text">{{ game.round.syllable }}</strong></h2>
               </div>
-              <v-progress-linear value="80" max="100"></v-progress-linear>
+              <v-progress-linear :value="time" max="100"></v-progress-linear>
             </v-card-text>
             <v-divider/>
             <v-card-text class="flex-grow-1">
@@ -71,6 +71,8 @@ export default {
   name: "Game",
   data: () => ({
     connection: null,
+    hook: null,
+    time: 0,
     word: ""
   }),
   async mounted() {
@@ -86,8 +88,29 @@ export default {
       const message = JSON.parse(frame.body);
       console.log(message);
     });
+
+    this.hook = window.setInterval(this.updateTime, 500);
+  },
+  beforeDestroy() {
+    if (this.connection !== null) {
+      this.connection.unsubscribe()
+    }
+
+    window.clearInterval(this.hook);
   },
   methods: {
+    updateTime() {
+      if (this.game.round === null) {
+        this.time = 0;
+        return;
+      }
+
+      const now = new Date();
+      const diff = new Date(this.game.round.end) - now;
+      const total = new Date(this.game.round.end) - new Date(this.game.round.start);
+
+      this.time = Math.max((diff / total) * 100, 0);
+    },
     player(id) {
       return this.game.players.find(player => player.id === id);
     },
