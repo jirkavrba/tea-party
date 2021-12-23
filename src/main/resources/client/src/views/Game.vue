@@ -32,8 +32,7 @@
             </v-card-text>
             <v-divider/>
             <v-card-text class="d-flex flex-row align-stretch">
-              <v-text-field outlined class="flex-grow-1" hint="Tip: You can use enter to submit the word" v-model="word"
-                            :persistent-hint="true" autofocus @keydown.enter="submitWord()"></v-text-field>
+              <v-text-field outlined class="flex-grow-1" hint="Tip: You can use enter to submit the word" v-model="word" :persistent-hint="true" autofocus @keydown.enter="submitWord()"></v-text-field>
               <v-btn color="primary" class="ml-2" icon x-large @click="submitWord()">
                 <v-icon>mdi-chevron-double-right</v-icon>
               </v-btn>
@@ -86,9 +85,15 @@ export default {
     }
 
     this.connection = api.ws.game(this.$route.params.id);
-    this.connection.subscribe(frame => {
+    this.connection.subscribe(async frame => {
       const message = JSON.parse(frame.body);
-      console.log(message);
+      const type = message.type;
+
+      switch (type) {
+        case "game-updated": await this.$store.commit("setGame", message.game); break;
+        case "scored-word-submitted": this.words.push(message.word); break;
+        default: console.error(`Unknown message type: ${type}`)
+      }
     });
 
     this.hook = window.setInterval(this.updateTime, 500);
