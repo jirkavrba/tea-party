@@ -148,24 +148,6 @@ export default {
           .sort()
           .reverse()
           .indexOf(score)
-    },
-    roundSummary() {
-      const round = Object.assign({}, this.game.round);
-      const words = [...this.words];
-      const summary = {
-        syllable: round.syllable,
-        winner: null,
-        word: null
-      }
-
-      if (words.length !== 0) {
-        const winner = words.map(word => ({ word, rank: this.rank(word, words) }))[0];
-
-        summary.winner = this.player(winner.word.player);
-        summary.word = winner.word;
-      }
-
-      return summary;
     }
   },
   computed: {
