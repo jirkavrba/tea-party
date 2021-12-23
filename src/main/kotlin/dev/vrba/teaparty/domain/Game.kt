@@ -1,6 +1,7 @@
 package dev.vrba.teaparty.domain
 
 import dev.vrba.teaparty.domain.game.GameMode
+import dev.vrba.teaparty.domain.game.GameRound
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.DBRef
 import org.springframework.data.mongodb.core.mapping.Document
@@ -16,5 +17,7 @@ data class Game(
     @DBRef
     val players: List<Player>,
 
-    val scores: Map<UUID, Int>
+    val scores: Map<UUID, Int>,
+
+    val round: GameRound? = null
 )

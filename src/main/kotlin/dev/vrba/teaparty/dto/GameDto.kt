@@ -2,6 +2,7 @@ package dev.vrba.teaparty.dto
 
 import dev.vrba.teaparty.domain.Game
 import dev.vrba.teaparty.domain.game.GameMode
+import dev.vrba.teaparty.domain.game.GameRound
 import java.util.*
 
 fun Game.dto(): GameDto = GameDto(
@@ -10,7 +11,8 @@ fun Game.dto(): GameDto = GameDto(
     players.map { it.dto() },
     scores.toList()
         .map { (player, score) -> Score(player, score) }
-        .sortedByDescending { it.score }
+        .sortedByDescending { it.score },
+    round
 )
 
 data class Score(val player: UUID, val score: Int)
@@ -19,5 +21,6 @@ data class GameDto(
     val id: UUID,
     val mode: GameMode,
     val players: List<PlayerDto>,
-    val scores: List<Score>
+    val scores: List<Score>,
+    val round: GameRound?
 )

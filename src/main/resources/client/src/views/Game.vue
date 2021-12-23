@@ -14,8 +14,8 @@
             <v-card-subtitle class="text-overline">
               Playing <span class="black--text">{{ game.mode.replace("T", " t") }}</span>
             </v-card-subtitle>
-            <v-divider/>
-            <v-card-text>
+            <v-divider v-if="game.round !== null"/>
+            <v-card-text v-if="game.round !== null">
               <div class="text-overline">
                 <h2 class="grey--text">Type in a word containing <strong class="primary--text">SYL</strong></h2>
               </div>
@@ -23,6 +23,12 @@
             </v-card-text>
             <v-divider/>
             <v-card-text class="flex-grow-1">
+              <v-fade-transition>
+                <v-overlay absolute opacity="0.85" v-if="game.round === null" class="text-center">
+                  <v-icon class="mdi-spin mb-4" size="96">mdi-yin-yang</v-icon>
+                  <h1>Waiting for a new round to start...</h1>
+                </v-overlay>
+              </v-fade-transition>
             </v-card-text>
             <v-divider/>
             <v-card-text class="d-flex flex-row align-stretch">
@@ -64,7 +70,8 @@ import api from "@/api";
 export default {
   name: "Game",
   data: () => ({
-    connection: null
+    connection: null,
+    word: ""
   }),
   async mounted() {
     await this.$store.dispatch("loadGame", this.$route.params.id);
