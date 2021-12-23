@@ -22,13 +22,32 @@
               <v-progress-linear :value="time" max="100"></v-progress-linear>
             </v-card-text>
             <v-divider/>
-            <v-card-text class="flex-grow-1">
+            <v-card-text style="height: 60vh; overflow: scroll">
               <v-fade-transition>
                 <v-overlay absolute opacity="0.85" v-if="game.round === null" class="text-center">
                   <v-icon class="mdi-spin mb-4" size="96">mdi-yin-yang</v-icon>
                   <h1>Waiting for a new round to start...</h1>
                 </v-overlay>
               </v-fade-transition>
+              <v-row>
+                <v-col v-for="(word, i) in pastWords" :key="i" cols="12">
+                  <v-chip disabled>
+                    <div class="text-overline mr-3">{{ player(word.player).username }}:</div>
+                    <div class="h2">{{ word.value }}</div>
+                    <v-icon v-if="rank(word.score) === 0">mdi-trophy-variant</v-icon>
+                  </v-chip>
+                </v-col>
+                <v-col>
+                  <v-divider v-if="pastWords.length > 0"/>
+                </v-col>
+                <v-col v-for="(word, i) in words" :key="i" cols="12">
+                  <v-chip :disabled="word.score < 0" :color="color(rank(word.score))">
+                      <div class="text-overline mr-3">{{ player(word.player).username }}:</div>
+                      <div class="h2">{{ word.value }}</div>
+                      <v-icon v-if="rank(word.score) === 0">mdi-trophy-variant</v-icon>
+                  </v-chip>
+                </v-col>
+              </v-row>
             </v-card-text>
             <v-divider/>
             <v-card-text class="d-flex flex-row align-stretch">
@@ -74,6 +93,7 @@ export default {
     hook: null,
     time: 0,
     word: "",
+    pastWords: [],
     words: []
   }),
   async mounted() {
@@ -90,8 +110,14 @@ export default {
       const type = message.type;
 
       switch (type) {
-        case "game-updated": await this.$store.commit("setGame", message.game); break;
-        case "scored-word-submitted": this.words.push(message.word); break;
+        case "game-updated":
+          await this.$store.commit("setGame", message.game);
+          this.pastWords = this.pastWords.concat(this.words);
+          this.words = [];
+          break;
+        case "scored-word-submitted":
+          this.words.push(message.word);
+        break;
         default: console.error(`Unknown message type: ${type}`)
       }
     });
@@ -127,6 +153,23 @@ export default {
     player(id) {
       return this.game.players.find(player => player.id === id);
     },
+    rank(score) {
+      return [...this.words]
+          .map(word => word.score)
+          .filter(score => score !== -1)
+          .sort()
+          .reverse()
+          .indexOf(score)
+    },
+    color(rank) {
+      const colors = [
+          "yellow",
+          "gray",
+          "orange"
+      ]
+
+      return colors[rank] || "";
+    }
   },
   computed: {
     scores: function () {
