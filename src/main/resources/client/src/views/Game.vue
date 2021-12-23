@@ -32,8 +32,9 @@
             </v-card-text>
             <v-divider/>
             <v-card-text class="d-flex flex-row align-stretch">
-              <v-text-field outlined class="flex-grow-1" hint="Tip: You can use enter to submit the word" :persistent-hint="true" autofocus></v-text-field>
-              <v-btn color="primary" class="ml-2" icon x-large>
+              <v-text-field outlined class="flex-grow-1" hint="Tip: You can use enter to submit the word" v-model="word"
+                            :persistent-hint="true" autofocus @submit="submitWord()"></v-text-field>
+              <v-btn color="primary" class="ml-2" icon x-large @click="submitWord()">
                 <v-icon>mdi-chevron-double-right</v-icon>
               </v-btn>
             </v-card-text>
@@ -110,6 +111,11 @@ export default {
       const total = new Date(this.game.round.end) - new Date(this.game.round.start);
 
       this.time = Math.max((diff / total) * 100, 0);
+    },
+    submitWord() {
+      if (this.word.trim() !== "") {
+        this.connection.send(this.$store.state.token, { word: this.word, })
+      }
     },
     player(id) {
       return this.game.players.find(player => player.id === id);

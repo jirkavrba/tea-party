@@ -30,7 +30,7 @@ const whenConnected = callback => {
     callback();
 }
 
-const send = (topic, message) => whenConnected(() => stomp.send(topic, {}, JSON.stringify(message)));
+const send = (topic, token, message) => stomp.send(topic, authentication(token).headers, JSON.stringify(message));
 const subscribe = (topic, callback) => whenConnected(() => stomp.subscribe(topic, callback));
 const unsubscribe = (topic) => whenConnected(() => stomp.unsubscribe(topic));
 
@@ -75,7 +75,7 @@ export default {
         lobbies: (callback) => subscribe("/lobbies", frame => callback(frame)),
         lobby: (id, callback) => subscribe(`/lobby/${id}`, frame => callback(frame)),
         game: (id) => ({
-            send: (message) => send(`/game/${id}`, message),
+            send: (token, message) => send(`/game/${id}`, token, message),
             subscribe: (callback) => subscribe(`/game/${id}`, frame => callback(frame)),
             unsubscribe: () => unsubscribe(`/game/${id}`)
         })

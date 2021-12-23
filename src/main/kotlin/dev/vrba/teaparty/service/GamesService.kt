@@ -77,8 +77,6 @@ class GamesService(
         val topic = "/game/${game.id}"
         val message = GameUpdatedMessage(game.dto())
 
-        println("Broadcasting game update to $topic")
-
         template.convertAndSend(topic, message)
     }
 }
