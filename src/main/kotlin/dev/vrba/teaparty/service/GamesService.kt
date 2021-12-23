@@ -81,7 +81,7 @@ class GamesService(
         }
 
         val scores = game.scores.map { (player, score) -> player to score + (change[player] ?: 0) }.toMap()
-        val finished = scores.any { (_, score) -> score >= 50 }
+        val finished = scores.any { (_, score) -> score >= 10 }
 
         game.copy(round = null, scores = scores, finished = finished).let {
             if (!it.finished) {
