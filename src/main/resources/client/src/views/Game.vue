@@ -30,21 +30,20 @@
                 </v-overlay>
               </v-fade-transition>
               <v-row>
-                <v-col v-for="(word, i) in pastWords" :key="i" cols="12">
-                  <v-chip disabled>
-                    <div class="text-overline mr-3">{{ player(word.player).username }}:</div>
-                    <div class="h2">{{ word.value }}</div>
-                    <v-icon v-if="rank(word.score) === 0">mdi-trophy-variant</v-icon>
-                  </v-chip>
-                </v-col>
-                <v-col>
-                  <v-divider v-if="pastWords.length > 0"/>
+                <v-col v-for="(round, i) in pastRounds" :key="i" cols="12">
+                  <v-card flat>
+                    <div v-if="round.winner === null" class="text-overline grey--text">Nobody won this round</div>
+                    <div v-else class="text-overline grey--text">{{ round.winner.username }} won the round with word '{{ round.word.value }}'</div>
+
+                    <div>The syllable was <span class="black--text">{{ round.syllable }}</span></div>
+                  </v-card>
+                  <v-divider class="my-4"/>
                 </v-col>
                 <v-col v-for="(word, i) in words" :key="i" cols="12">
-                  <v-chip :disabled="word.score < 0" :color="color(rank(word.score))">
+                  <v-chip :disabled="word.score < 0" :color="color(rank(word.score, words))">
                       <div class="text-overline mr-3">{{ player(word.player).username }}:</div>
                       <div class="h2">{{ word.value }}</div>
-                      <v-icon v-if="rank(word.score) === 0">mdi-trophy-variant</v-icon>
+                      <v-icon v-if="rank(word.score, words) === 0">mdi-trophy-variant</v-icon>
                   </v-chip>
                 </v-col>
               </v-row>
@@ -93,7 +92,7 @@ export default {
     hook: null,
     time: 0,
     word: "",
-    pastWords: [],
+    pastRounds: [],
     words: []
   }),
   async mounted() {
@@ -112,7 +111,8 @@ export default {
       switch (type) {
         case "game-updated":
           await this.$store.commit("setGame", message.game);
-          this.pastWords = this.pastWords.concat(this.words);
+          this.pastRounds.push(this.roundSummary());
+          this.pastRounds = this.pastRounds.slice(this.pastRounds.length - 5, this.pastRounds.length);
           this.words = [];
           break;
         case "scored-word-submitted":
@@ -153,8 +153,8 @@ export default {
     player(id) {
       return this.game.players.find(player => player.id === id);
     },
-    rank(score) {
-      return [...this.words]
+    rank(score, words) {
+      return [...words]
           .map(word => word.score)
           .filter(score => score !== -1)
           .sort()
@@ -169,6 +169,24 @@ export default {
       ]
 
       return colors[rank] || "";
+    },
+    roundSummary() {
+      const round = Object.assign({}, this.game.round);
+      const words = [...this.words];
+      const summary = {
+        syllable: round.syllable,
+        winner: null,
+        word: null
+      }
+
+      if (words.length !== 0) {
+        const winner = words.map(word => ({ word, rank: this.rank(word, words) }))[0];
+
+        summary.winner = this.player(winner.word.player);
+        summary.word = winner.word;
+      }
+
+      return summary;
     }
   },
   computed: {
