@@ -75,7 +75,7 @@ class GamesService(
         val change = when (round.mode.scoring) {
             ScoringType.Single -> best.firstOrNull()?.let { mapOf(it.first to 5) } ?: mapOf()
             ScoringType.TopThree -> best.take(3).mapIndexed { index, word ->
-                // First player receives 5 points, second receives 3 points and third player recieves 1 point
+                // First player receives 5 points, second receives 3 points and third player receieves 1 point
                 word.first to (5 - 2 * index).coerceAtLeast(0)
             }.toMap()
         }
