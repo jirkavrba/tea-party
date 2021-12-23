@@ -31,9 +31,9 @@
               </v-fade-transition>
               <v-row>
                 <v-col v-for="(word, i) in words" :key="i" cols="12">
-                 <v-chip :disabled="word.score < 0" :color="color(rank(word.score, words))">
+                 <v-chip :disabled="word.score < 0" :color="rank(word.score, words) === 0 ? 'yellow' : 'grey'">
                       <div class="text-overline mr-3">{{ player(word.player).username }}:</div>
-                      <div class="h2">{{ word.value }} ({{ word.score}})</div>
+                      <div class="h2">{{ word.value }}</div>
                       <v-icon v-if="rank(word.score, words) === 0">mdi-trophy-variant</v-icon>
                   </v-chip>
                 </v-col>
@@ -148,15 +148,6 @@ export default {
           .sort()
           .reverse()
           .indexOf(score)
-    },
-    color(rank) {
-      const colors = [
-          "yellow",
-          "gray",
-          "orange"
-      ]
-
-      return colors[rank] || "";
     },
     roundSummary() {
       const round = Object.assign({}, this.game.round);
