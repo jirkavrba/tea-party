@@ -70,24 +70,27 @@ class GamesService(
         // Pick best word for each player
         val best = round.words.groupBy { it.player }
             .map { (player, words) -> player to words.maxOf { it.score } }
-            .sortedByDescending { (_player, score) -> score }
+            .sortedByDescending { (_, score) -> score }
 
         val change = when (round.mode.scoring) {
             ScoringType.Single -> best.firstOrNull()?.let { mapOf(it.first to 5) } ?: mapOf()
             ScoringType.TopThree -> best.take(3).mapIndexed { index, word ->
-                // First player receives 5 points, second receives 3 points and third player receieves 1 point
+                // First player receives 5 points, second receives 3 points and third player receives 1 point
                 word.first to (5 - 2 * index).coerceAtLeast(0)
             }.toMap()
         }
 
         val scores = game.scores.map { (player, score) -> player to score + (change[player] ?: 0) }.toMap()
+        val finished = scores.any { (_, score) -> score >= 50 }
 
-        game.copy(round = null, scores = scores).let {
-            repository.save(it)
+        game.copy(round = null, scores = scores, finished = finished).let {
+            if (!it.finished) {
+                scheduler.schedule({ scheduleNextRound(id) }, Instant.now() + Duration.ofSeconds(5))
+            }
+
             broadcastGameUpdate(it)
+            repository.save(it)
         }
-
-        scheduler.schedule({ scheduleNextRound(id) }, Instant.now() + Duration.ofSeconds(5))
     }
 
     private fun scheduleNextRound(id: UUID) {
