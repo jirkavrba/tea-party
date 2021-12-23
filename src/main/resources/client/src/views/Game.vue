@@ -30,19 +30,10 @@
                 </v-overlay>
               </v-fade-transition>
               <v-row>
-                <v-col v-for="(round, i) in pastRounds" :key="i" cols="12">
-                  <v-card flat>
-                    <div v-if="round.winner === null" class="text-overline grey--text">Nobody won this round</div>
-                    <div v-else class="text-overline grey--text">{{ round.winner.username }} won the round with word '{{ round.word.value }}'</div>
-
-                    <div>The syllable was <span class="black--text">{{ round.syllable }}</span></div>
-                  </v-card>
-                  <v-divider class="my-4"/>
-                </v-col>
                 <v-col v-for="(word, i) in words" :key="i" cols="12">
-                  <v-chip :disabled="word.score < 0" :color="color(rank(word.score, words))">
+                 <v-chip :disabled="word.score < 0" :color="color(rank(word.score, words))">
                       <div class="text-overline mr-3">{{ player(word.player).username }}:</div>
-                      <div class="h2">{{ word.value }}</div>
+                      <div class="h2">{{ word.value }} ({{ word.score}})</div>
                       <v-icon v-if="rank(word.score, words) === 0">mdi-trophy-variant</v-icon>
                   </v-chip>
                 </v-col>
@@ -92,7 +83,6 @@ export default {
     hook: null,
     time: 0,
     word: "",
-    pastRounds: [],
     words: []
   }),
   async mounted() {
@@ -111,8 +101,6 @@ export default {
       switch (type) {
         case "game-updated":
           await this.$store.commit("setGame", message.game);
-          this.pastRounds.push(this.roundSummary());
-          this.pastRounds = this.pastRounds.slice(this.pastRounds.length - 5, this.pastRounds.length);
           this.words = [];
           break;
         case "scored-word-submitted":
