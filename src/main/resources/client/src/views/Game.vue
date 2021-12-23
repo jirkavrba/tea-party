@@ -31,10 +31,10 @@
               </v-fade-transition>
               <v-row>
                 <v-col v-for="(word, i) in words" :key="i" cols="12">
-                 <v-chip :disabled="word.score < 0" :color="rank(word.score, words) === 0 ? 'yellow' : 'grey'">
+                 <v-chip :disabled="word.score < 0" :color="rank(word.score, words) === 0 ? 'orange' : 'black'" large text-color="white" class="px-8">
                       <div class="text-overline mr-3">{{ player(word.player).username }}:</div>
                       <div class="h2">{{ word.value }}</div>
-                      <v-icon v-if="rank(word.score, words) === 0">mdi-trophy-variant</v-icon>
+                      <v-icon v-if="rank(word.score, words) === 0" class="ml-4">mdi-trophy-variant</v-icon>
                   </v-chip>
                 </v-col>
               </v-row>
@@ -134,7 +134,7 @@ export default {
     },
     submitWord() {
       if (this.word.trim() !== "") {
-        this.connection.send(this.$store.state.token, { word: this.word, })
+        this.connection.send(this.$store.state.token, { word: this.word.toLowerCase() })
         this.word = "";
       }
     },
