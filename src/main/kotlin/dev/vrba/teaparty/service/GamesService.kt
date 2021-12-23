@@ -56,7 +56,7 @@ class GamesService(
         val round = game.round ?: return
 
         val submitted = SubmittedWord(word, player.id, Instant.now())
-        val scored = scoringService.score(round.mode, submitted, round.words)
+        val scored = scoringService.score(round.mode, submitted, round.syllable, round.words)
 
         game.copy(round = round.copy(words = round.words + scored)).let { repository.save(it) }
         broadcastScoredWord(game, scored)

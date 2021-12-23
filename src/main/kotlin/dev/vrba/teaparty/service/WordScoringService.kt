@@ -18,9 +18,9 @@ class WordScoringService(@Value("\${wordlist.path:/wordlist.txt}") path: String)
 
     fun isValidWord(word: String): Boolean = words.contains(word.lowercase())
 
-    fun score(mode: GameMode, word: SubmittedWord, previous: List<ScoredWord>): ScoredWord {
+    fun score(mode: GameMode, word: SubmittedWord, syllable: String, previous: List<ScoredWord>): ScoredWord {
         // If the word is not a valid word, or it has been submitted before, automatically score it with -1 points
-        if (!isValidWord(word.value) || previous.any { it.value == word.value }) {
+        if (!word.value.contains(syllable) || !isValidWord(word.value) || previous.any { it.value == word.value }) {
             return word.score(-1.0)
         }
 
