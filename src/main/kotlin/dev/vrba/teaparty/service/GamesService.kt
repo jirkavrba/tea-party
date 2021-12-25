@@ -13,6 +13,7 @@ import dev.vrba.teaparty.exceptions.NotJoinedInGameException
 import dev.vrba.teaparty.repository.GamesRepository
 import dev.vrba.teaparty.websocket.messages.GameUpdatedMessage
 import dev.vrba.teaparty.websocket.messages.ScoredWordSubmittedMessage
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.messaging.simp.SimpMessagingTemplate
 import org.springframework.scheduling.TaskScheduler
@@ -26,8 +27,13 @@ class GamesService(
     private val scoringService: WordScoringService,
     private val repository: GamesRepository,
     private val template: SimpMessagingTemplate,
-    private val scheduler: TaskScheduler
+    private val scheduler: TaskScheduler,
+    @Value("\${syllables.path:/syllables.txt}") path: String
 ) {
+    private val syllables = javaClass.getResource(path)
+        ?.readText()
+        ?.lines()
+        ?.toSet() ?: throw IllegalArgumentException("Cannot find the specified syllables resource [$path]")
 
     fun deleteAllGames() = repository.deleteAll()
 
@@ -81,7 +87,7 @@ class GamesService(
         }
 
         val scores = game.scores.map { (player, score) -> player to score + (change[player] ?: 0) }.toMap()
-        val finished = scores.any { (_, score) -> score >= 10 }
+        val finished = scores.any { (_, score) -> score >= 50 }
 
         game.copy(round = null, scores = scores, finished = finished).let {
             if (!it.finished) {
@@ -96,7 +102,9 @@ class GamesService(
     private fun scheduleNextRound(id: UUID) {
         val game = repository.findByIdOrNull(id) ?: return
         val runnable = {
-            game.copy(round = createNewRound(game)).let {
+            val syllables = game.round?.let { game.usedSyllables + it.syllable } ?: game.usedSyllables
+
+            game.copy(round = createNewRound(game), usedSyllables = syllables).let {
                 scheduler.schedule({ scoreRound(id) }, it.round!!.end)
                 repository.save(it)
                 broadcastGameUpdate(it)
@@ -108,8 +116,7 @@ class GamesService(
     }
 
     private fun createNewRound(game: Game): GameRound {
-        // TODO: Add proper list of syllables / procedural generator
-        val syllable = listOf("syl", "sys", "cot").random()
+        val syllable = (syllables - game.usedSyllables).random()
 
         // TODO: Add game configuration later
         val start = Instant.now()

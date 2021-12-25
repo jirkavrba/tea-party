@@ -19,6 +19,8 @@ data class Game(
 
     val scores: Map<UUID, Int>,
 
+    val usedSyllables: Set<String> = setOf(),
+
     val round: GameRound? = null,
 
     val finished: Boolean = false
