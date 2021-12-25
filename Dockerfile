@@ -17,4 +17,4 @@ RUN gradle bootJar
 
 FROM openjdk:17-slim
 COPY --from=backend /build/build/libs/tea-party-*.jar /app.jar
-ENTRYPOINT ["sh", "-c", "java -jar /app.jar"]
+ENTRYPOINT ["java", "-jar", "/app.jar"]
