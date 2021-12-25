@@ -1,0 +1,26 @@
+name: Heroku deploy
+
+on:
+  workflow_run:
+    workflows:
+      - Gradle build
+    branches:
+      - main
+    types:
+      - completed
+
+jobs:
+  heroku-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v2
+
+      - name: Build and push Docker to Heroku
+        uses: akhileshns/heroku-deploy@v3.12.12
+        with:
+          appdir: "."
+          usedocker: true
+          heroku_app_name: paul-bot-vse
+          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+          heroku_email: ${{ secrets.HEROKU_EMAIL }}
