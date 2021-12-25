@@ -21,6 +21,6 @@ jobs:
         with:
           appdir: "."
           usedocker: true
-          heroku_app_name: paul-bot-vse
+          heroku_app_name: tea-party-game
           heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
           heroku_email: ${{ secrets.HEROKU_EMAIL }}
