@@ -91,7 +91,7 @@ class GamesService(
 
         game.copy(round = null, scores = scores, finished = finished).let {
             if (!it.finished) {
-                scheduler.schedule({ scheduleNextRound(id) }, Instant.now() + Duration.ofSeconds(5))
+                scheduler.schedule({ scheduleNextRound(id) }, Instant.now() + Duration.ofSeconds(3))
             }
 
             broadcastGameUpdate(it)
@@ -112,7 +112,7 @@ class GamesService(
         }
 
         // 5 seconds should be enough for all players to be connected to the websocket endpoint
-        scheduler.schedule(runnable, Instant.now() + Duration.ofSeconds(5))
+        scheduler.schedule(runnable, Instant.now() + Duration.ofSeconds(3))
     }
 
     private fun createNewRound(game: Game): GameRound {
