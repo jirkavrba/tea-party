@@ -9,7 +9,9 @@ FROM gradle:alpine AS backend
 RUN mkdir /build
 COPY . /build
 RUN rm -rf /build/main/resources/static
+RUN rm -rf /build/main/resources/templates
 COPY --from=frontend /build/dist /build/src/main/resources/static/
+RUN mkdir /build/src/main/resources/templates
 RUN mv /build/src/main/resources/static/index.html /build/src/main/resources/templates/index.html
 RUN rm -rf /build/src/main/resources/client
 WORKDIR /build
