@@ -53,10 +53,10 @@
             <v-divider/>
             <v-card-text style="height: 60vh; overflow: scroll">
               <v-fade-transition>
-                <v-overlay absolute opacity="0.85" v-if="game.round === null" class="text-center">
+                <v-alert v-if="game.round === null" class="text-center">
                   <v-icon class="mdi-spin mb-4" size="96">mdi-yin-yang</v-icon>
                   <h1>Waiting for a new round to start...</h1>
-                </v-overlay>
+                </v-alert>
               </v-fade-transition>
               <v-row>
                 <v-col v-for="(word, i) in words" :key="i" cols="12">
@@ -135,6 +135,7 @@ export default {
         case "game-updated":
           await this.$store.commit("setGame", message.game);
           this.words = [];
+          this.word = "";
           break;
         case "scored-word-submitted":
           this.words.push(message.word);
