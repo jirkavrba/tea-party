@@ -163,15 +163,12 @@ export default {
 
       const start = new Date(this.game.round.start);
       const end = new Date(this.game.round.end);
+      const now = new Date();
 
-      // Timezone offset is synchronised from the server-side dates
-      const offset = start.getTimezoneOffset();
-      const now = new Date(new Date().getTime() + offset);
-
-      const diff = end - now;
+      const remaining = end - now;
       const total = end - start;
 
-      this.time = Math.max((diff / total) * 100, 0);
+      this.time = Math.max(((remaining / total) % 1) * 100, 0);
     },
     submitWord() {
       if (this.word.trim() !== "") {
