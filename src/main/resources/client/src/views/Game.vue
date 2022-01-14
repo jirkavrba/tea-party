@@ -168,7 +168,7 @@ export default {
       const remaining = end - now;
       const total = end - start;
 
-      this.time = Math.max(((remaining / total) % 1) * 100, 0);
+      this.time = (Math.max(remaining / total, 0) % 1) * 100;
     },
     submitWord() {
       if (this.word.trim() !== "") {
