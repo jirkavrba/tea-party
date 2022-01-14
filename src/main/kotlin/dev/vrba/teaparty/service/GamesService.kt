@@ -76,6 +76,7 @@ class GamesService(
         // Pick best word for each player
         val best = round.words.groupBy { it.player }
             .map { (player, words) -> player to words.maxOf { it.score } }
+            .filter { (_, score) -> score > 0 }
             .sortedByDescending { (_, score) -> score }
 
         val change = when (round.mode.scoring) {
