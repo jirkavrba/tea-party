@@ -145,7 +145,7 @@ export default {
       }
     });
 
-    this.hook = window.setInterval(this.updateTime, 500);
+    this.hook = window.setInterval(this.updateTime, 100);
   },
   beforeDestroy() {
     if (this.connection !== null) {
@@ -161,9 +161,15 @@ export default {
         return;
       }
 
-      const now = new Date();
-      const diff = new Date(this.game.round.end) - now;
-      const total = new Date(this.game.round.end) - new Date(this.game.round.start);
+      const start = new Date(this.game.round.start);
+      const end = new Date(this.game.round.end);
+
+      // Timezone offset is synchronised from the server-side dates
+      const offset = start.getTimezoneOffset();
+      const now = new Date(new Date().getTime() + offset);
+
+      const diff = end - now;
+      const total = end - start;
 
       this.time = Math.max((diff / total) * 100, 0);
     },
